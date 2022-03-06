@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WordsFactory">
         <activity
-            android:name=".onboarding.OnboardingActivity"
+            android:name="com.r3d1r4ph.wordsfactory.ui.onboarding.OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

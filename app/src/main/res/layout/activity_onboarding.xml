@@ -6,15 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".onboarding.OnboardingActivity">
+    tools:context=".ui.onboarding.OnboardingActivity">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/onboardingViewPager"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:paddingHorizontal="16dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toTopOf="@id/onboardingTabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +40,6 @@
         android:id="@+id/onboardingNextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Button"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="Skip"
+        android:text="@string/onboarding_skip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
