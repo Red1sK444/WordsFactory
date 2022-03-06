@@ -39,26 +39,12 @@ class OnboardingActivity : AppCompatActivity() {
             viewPager
         ) { _, _ -> }.attach()
 
-        viewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+
+                viewModel.updateCurrentIntroByGesture(position)
                 nextButtonStateUpdate(position)
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                val prevPosition = viewModel.uiState.value.currentIntro
-
-                if (position < prevPosition) {
-                    viewPager.setCurrentItem(prevPosition, false)
-                } else if (position > prevPosition) {
-                    nextIntro()
-                }
             }
         })
     }
@@ -82,7 +68,7 @@ class OnboardingActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
                     viewPagerAdapter.submitList(uiState.introList)
-                    swipeToNextIntro(uiState.currentIntro)
+                    swipeToIntro(uiState.currentIntro)
                 }
             }
         }
@@ -93,10 +79,10 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun nextIntro() {
-        viewModel.nextIntro()
+        viewModel.changeIntro(toNext = true)
     }
 
-    private fun swipeToNextIntro(nextIntro: Int) {
-        viewBinding.onboardingViewPager.setCurrentItem(nextIntro, true)
+    private fun swipeToIntro(intro: Int) {
+        viewBinding.onboardingViewPager.setCurrentItem(intro, true)
     }
 }

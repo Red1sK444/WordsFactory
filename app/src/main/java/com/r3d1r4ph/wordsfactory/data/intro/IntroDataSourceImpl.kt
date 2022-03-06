@@ -24,6 +24,9 @@ class IntroDataSourceImpl : IntroDataSource {
     override fun getNextIntro(currentIntro: Int): Int =
         if (currentIntro == introList.lastIndex) currentIntro else currentIntro + 1
 
+    override fun getPrevIntro(currentIntro: Int): Int =
+        if (currentIntro == 0) currentIntro else currentIntro - 1
+
     override fun isLastIntro(currentIntro: Int): Boolean = currentIntro == introList.lastIndex
 
     override fun getInitIntro(): Int = 0

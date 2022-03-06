@@ -6,6 +6,8 @@ class IntroRepositoryImpl(private val introDataSource: IntroDataSource) : IntroR
 
     override fun getNextIntro(currentIntro: Int): Int = introDataSource.getNextIntro(currentIntro)
 
+    override fun getPrevIntro(currentIntro: Int): Int = introDataSource.getPrevIntro(currentIntro)
+
     override fun isLastIntro(currentIntro: Int): Boolean = introDataSource.isLastIntro(currentIntro)
 
     override fun getInitIntro(): Int = introDataSource.getInitIntro()

@@ -33,11 +33,20 @@ class OnboardingViewModel : ViewModel() {
 
     fun isLastIntro(currentIntro: Int): Boolean = introRepository.isLastIntro(currentIntro)
 
-    fun nextIntro() {
+    fun updateCurrentIntroByGesture(intro: Int) {
+        if (intro < uiState.value.currentIntro) {
+            changeIntro(false)
+        } else if (intro > uiState.value.currentIntro) {
+            changeIntro(true)
+        }
+    }
+
+    fun changeIntro(toNext: Boolean) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    currentIntro = introRepository.getNextIntro(_uiState.value.currentIntro)
+                    currentIntro = if (toNext) introRepository.getNextIntro(_uiState.value.currentIntro)
+                    else introRepository.getPrevIntro(_uiState.value.currentIntro)
                 )
             }
         }
