@@ -12,7 +12,6 @@
         android:id="@+id/onboardingViewPager"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
         android:layout_marginTop="5dp"
         app:layout_constraintBottom_toTopOf="@id/onboardingTabLayout"
         app:layout_constraintEnd_toEndOf="parent"
