@@ -9,40 +9,53 @@
     tools:context=".onboarding.OnboardingActivity">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+        android:id="@+id/onboardingViewPager"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@id/onboardingTabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/onboardingSkipButton" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/onboardingTabLayout"
         android:layout_width="match_parent"
         android:layout_height="6dp"
+        app:layout_constraintBottom_toTopOf="@id/onboardingNextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboardingViewPager"
         app:tabBackground="@drawable/selector_tab_indicator_dot"
         app:tabGravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="45dp"
         app:tabIndicator="@null"
-        app:tabPaddingStart="8dp"
         app:tabPaddingEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+        app:tabPaddingStart="8dp" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.ButtonMediumText.MediumButton"
+        android:id="@+id/onboardingNextButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Button"
-        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="710dp" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/onboardingSkipButton"
+        style="@style/Widget.MaterialComponents.Button.ButtonSmallText.SmallButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="Skip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

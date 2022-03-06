@@ -30,6 +30,7 @@ class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>(
         private val binding = ItemOnboardingViewPagerBinding.bind(view)
 
         fun bind(position: Int) {
+            binding.itemViewPagerImageView.setImageResource(R.drawable.img_splash_screen)
             binding.root.setBackgroundResource(colors[position])
         }
     }

@@ -18,25 +18,25 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_onboarding)
 
         val adapter = ViewPagerAdapter()
-        viewBinding.viewPager.adapter = adapter
+        viewBinding.onboardingViewPager.adapter = adapter
         TabLayoutMediator(
-            viewBinding.tabLayout,
-            viewBinding.viewPager
+            viewBinding.onboardingTabLayout,
+            viewBinding.onboardingViewPager
         ) { _, _ -> }.attach()
 
-        viewBinding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        viewBinding.onboardingViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                viewBinding.button.text = if (position + 1 == adapter.itemCount) {
+                viewBinding.onboardingNextButton.text = if (position + 1 == adapter.itemCount) {
                     "Let's Start"
                 } else {
                     "Next"
                 }
             }
         })
-        viewBinding.button.setOnClickListener {
-            if (viewBinding.viewPager.currentItem + 1 < adapter.itemCount) {
-                viewBinding.viewPager.setCurrentItem(viewBinding.viewPager.currentItem + 1, true)
+        viewBinding.onboardingNextButton.setOnClickListener {
+            if (viewBinding.onboardingViewPager.currentItem + 1 < adapter.itemCount) {
+                viewBinding.onboardingViewPager.setCurrentItem(viewBinding.onboardingViewPager.currentItem + 1, true)
             } else {
                 Toast.makeText(this, "agfagag", Toast.LENGTH_LONG).show()
             }
