@@ -4,6 +4,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
+import com.r3d1r4ph.wordsfactory.data.Database
+import com.r3d1r4ph.wordsfactory.data.auth.AuthRepository
+import com.r3d1r4ph.wordsfactory.data.auth.AuthRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +21,11 @@ data class SignUpUiState(
 )
 
 class SignUpViewModel : ViewModel() {
+
+//    private val repository = AuthRepositoryImpl(
+//        authDao = Database.getInstance(),
+//        externalScope =
+//    )
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState>
