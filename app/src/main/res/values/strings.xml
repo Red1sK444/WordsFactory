@@ -5,4 +5,7 @@
     <string name="signup_name">Name</string>
     <string name="signup_e_mail">E-mail</string>
     <string name="signup_password">Password</string>
+    <string name="signup_empty_field">Поле не заполнено</string>
+    <string name="signup_not_e_mail">Поле должно cодержать символ \'@\'</string>
+    <string name="empty"/>
 </resources>
