@@ -4,9 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.data.Database
 import com.r3d1r4ph.wordsfactory.data.auth.AuthRepository
-import com.r3d1r4ph.wordsfactory.data.auth.AuthRepositoryImpl
+import com.r3d1r4ph.wordsfactory.domain.Auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,35 +19,34 @@ data class SignUpUiState(
     val openDictionaryScreen: Boolean = false
 )
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-//    private val repository = AuthRepositoryImpl(
-//        authDao = Database.getInstance(),
-//        externalScope =
-//    )
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState>
         get() = _uiState.asStateFlow()
 
     fun signUp(
-        name: String,
-        email: String,
-        password: String
+        auth: Auth
     ) {
-        val nameError = emptyFieldCheck(name)
-        val emailError = emailFieldCheck(email)
-        val passwordError = emptyFieldCheck(password)
+        val nameError = emptyFieldCheck(auth.name)
+        val emailError = emailFieldCheck(auth.email)
+        val passwordError = emptyFieldCheck(auth.password)
 
         viewModelScope.launch {
+            if (nameError == R.string.empty
+                && emailError == R.string.empty
+                && passwordError == R.string.empty
+            ) {
+                authorize(auth)
+            }
+
             _uiState.update {
                 SignUpUiState(
                     nameError = nameError,
                     emailError = emailError,
                     passwordError = passwordError,
-                    openDictionaryScreen = nameError == R.string.empty
-                            && emailError == R.string.empty
-                            && passwordError == R.string.empty
+                    openDictionaryScreen = authRepository.checkAuth()
                 )
             }
         }
@@ -74,4 +72,17 @@ class SignUpViewModel : ViewModel() {
             R.string.empty
         }
     }
+
+    private suspend fun authorize(auth: Auth) {
+        authRepository.insertAuth(auth)
+    }
+
+    fun checkAuth() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(openDictionaryScreen = authRepository.checkAuth())
+            }
+        }
+    }
+
 }

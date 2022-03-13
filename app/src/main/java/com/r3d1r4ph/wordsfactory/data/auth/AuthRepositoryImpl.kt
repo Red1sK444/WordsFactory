@@ -5,14 +5,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
-    private val authDao: AuthDao,
-    private val externalScope: CoroutineScope
+    private val authDao: AuthDao
 ) : AuthRepository {
 
     override suspend fun insertAuth(auth: Auth) {
-        withContext(externalScope.coroutineContext) {
-            authDao.insert(auth.toEntity())
-        }
+        authDao.insert(auth.toEntity())
     }
 
     override suspend fun checkAuth() =

@@ -1,7 +1,6 @@
 package com.r3d1r4ph.wordsfactory.ui.signup
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -12,21 +11,50 @@ import androidx.lifecycle.repeatOnLifecycle
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivitySignUpBinding
+import com.r3d1r4ph.wordsfactory.domain.Auth
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SignUpActivity : AppCompatActivity() {
 
     private val viewBinding by viewBinding(ActivitySignUpBinding::bind, R.id.rootLayout)
-    private val viewModel by viewModels<SignUpViewModel>()
+    private val viewModel by viewModels<SignUpViewModel> {
+        SignUpViewModelFactory(application)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+        viewModel.checkAuth()
+        initView()
+    }
 
+    private fun initView() {
         setErrorDismisses()
-        setOnClickListener()
-        setCollector()
+
+        viewBinding.signUpButton.setOnClickListener {
+            with(viewBinding) {
+                viewModel.signUp(
+                    Auth(
+                        name = signUpNameTextInputEditText.text.toString(),
+                        email = signUpEmailTextInputEditText.text.toString(),
+                        password = signUpPasswordTextInputEditText.text.toString()
+                    )
+                )
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+                    if (uiState.openDictionaryScreen) {
+                        openDictionaryScreen()
+                    } else {
+                        setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
+                    }
+                }
+            }
+        }
     }
 
     private fun setErrorDismisses() = with(viewBinding) {
@@ -40,32 +68,6 @@ class SignUpActivity : AppCompatActivity() {
 
         signUpPasswordTextInputEditText.addTextChangedListener {
             signUpPasswordTextInputLayout.error = resources.getString(R.string.empty)
-        }
-    }
-
-    private fun setOnClickListener() {
-        viewBinding.signUpButton.setOnClickListener {
-            with(viewBinding) {
-                viewModel.signUp(
-                    name = signUpNameTextInputEditText.text.toString(),
-                    email = signUpEmailTextInputEditText.text.toString(),
-                    password = signUpPasswordTextInputEditText.text.toString()
-                )
-            }
-        }
-    }
-
-    private fun setCollector() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    if (uiState.openDictionaryScreen) {
-                        openDictionaryScreen()
-                    } else {
-                        setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
-                    }
-                }
-            }
         }
     }
 
@@ -83,6 +85,6 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun openDictionaryScreen() {
-        Toast.makeText(this, "openDictionaryScreen", Toast.LENGTH_SHORT).show()
+        //TODO openDictionaryScreen
     }
 }
