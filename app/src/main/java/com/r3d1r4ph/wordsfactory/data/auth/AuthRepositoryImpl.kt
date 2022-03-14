@@ -1,10 +1,9 @@
 package com.r3d1r4ph.wordsfactory.data.auth
 
 import com.r3d1r4ph.wordsfactory.domain.Auth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val authDao: AuthDao
 ) : AuthRepository {
 

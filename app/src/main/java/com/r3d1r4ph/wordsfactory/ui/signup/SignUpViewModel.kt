@@ -7,9 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.data.auth.AuthRepository
 import com.r3d1r4ph.wordsfactory.domain.Auth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState = MutableLiveData(SignUpUiState())
     val uiState: LiveData<SignUpUiState>
