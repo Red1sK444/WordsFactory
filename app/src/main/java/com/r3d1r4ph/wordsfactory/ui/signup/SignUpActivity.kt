@@ -1,6 +1,7 @@
 package com.r3d1r4ph.wordsfactory.ui.signup
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,19 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         viewModel.checkAuth()
+        setObserver()
         initView()
+    }
+
+    private fun setObserver() {
+        viewModel.uiState.observe(this) { uiState ->
+            viewBinding.signUpButton.isEnabled = !uiState.openDictionaryScreen
+            if (uiState.openDictionaryScreen) {
+                openDictionaryScreen()
+            } else {
+                setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
+            }
+        }
     }
 
     private fun initView() {
@@ -41,18 +54,6 @@ class SignUpActivity : AppCompatActivity() {
                         password = signUpPasswordTextInputEditText.text.toString()
                     )
                 )
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    if (uiState.openDictionaryScreen) {
-                        openDictionaryScreen()
-                    } else {
-                        setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
-                    }
-                }
             }
         }
     }
@@ -85,6 +86,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun openDictionaryScreen() {
+        Toast.makeText(this, "openDictionaryScreen", Toast.LENGTH_SHORT).show()
         //TODO openDictionaryScreen
     }
 }

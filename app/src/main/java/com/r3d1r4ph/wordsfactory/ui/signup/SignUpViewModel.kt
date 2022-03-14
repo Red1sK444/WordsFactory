@@ -1,30 +1,19 @@
 package com.r3d1r4ph.wordsfactory.ui.signup
 
-import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.data.auth.AuthRepository
 import com.r3d1r4ph.wordsfactory.domain.Auth
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-data class SignUpUiState(
-    @StringRes val nameError: Int = R.string.empty,
-    @StringRes val emailError: Int = R.string.empty,
-    @StringRes val passwordError: Int = R.string.empty,
-    val openDictionaryScreen: Boolean = false
-)
 
 class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-
-    private val _uiState = MutableStateFlow(SignUpUiState())
-    val uiState: StateFlow<SignUpUiState>
-        get() = _uiState.asStateFlow()
+    private val _uiState = MutableLiveData(SignUpUiState())
+    val uiState: LiveData<SignUpUiState>
+        get() = _uiState
 
     fun signUp(
         auth: Auth
@@ -41,14 +30,13 @@ class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() 
                 authorize(auth)
             }
 
-            _uiState.update {
+            _uiState.value =
                 SignUpUiState(
                     nameError = nameError,
                     emailError = emailError,
                     passwordError = passwordError,
                     openDictionaryScreen = authRepository.checkAuth()
                 )
-            }
         }
     }
 
@@ -79,9 +67,7 @@ class SignUpViewModel(private val authRepository: AuthRepository) : ViewModel() 
 
     fun checkAuth() {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(openDictionaryScreen = authRepository.checkAuth())
-            }
+            _uiState.value = _uiState.value?.copy(openDictionaryScreen = authRepository.checkAuth())
         }
     }
 
