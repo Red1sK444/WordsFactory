@@ -1,54 +1,58 @@
 package com.r3d1r4ph.wordsfactory.ui.onboarding
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.r3d1r4ph.wordsfactory.data.intro.IntroDataSource
 import com.r3d1r4ph.wordsfactory.data.intro.IntroDataSourceImpl
 import com.r3d1r4ph.wordsfactory.data.intro.IntroItem
-import com.r3d1r4ph.wordsfactory.data.intro.IntroRepository
-import com.r3d1r4ph.wordsfactory.data.intro.IntroRepositoryImpl
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-data class OnboardingUiState(
-    val introList: List<IntroItem>,
-    val currentIntro: Int
-)
 
 class OnboardingViewModel : ViewModel() {
 
-    private val introRepository: IntroRepository = IntroRepositoryImpl(IntroDataSourceImpl())
+    private val introDataSource: IntroDataSource = IntroDataSourceImpl()
 
     private val _uiState =
-        MutableStateFlow(
+        MutableLiveData(
             OnboardingUiState(
-                introList = introRepository.getIntroList(),
-                currentIntro = introRepository.getInitIntro()
+                currentIntro = introDataSource.getCurrentIntro(),
+                isLastIntro = introDataSource.isLastIntro()
             )
         )
-    val uiState: StateFlow<OnboardingUiState>
-        get() = _uiState.asStateFlow()
+    val uiState: LiveData<OnboardingUiState>
+        get() = _uiState
 
-    fun isLastIntro(currentIntro: Int): Boolean = introRepository.isLastIntro(currentIntro)
+    private val _introList = MutableLiveData<List<IntroItem>>()
+    val introList: LiveData<List<IntroItem>>
+        get() = _introList
+
+    fun loadIntroList() {
+        viewModelScope.launch {
+            _introList.value = introDataSource.getIntroList()
+        }
+    }
 
     fun updateCurrentIntroByGesture(intro: Int) {
-        if (intro < uiState.value.currentIntro) {
-            changeIntro(false)
-        } else if (intro > uiState.value.currentIntro) {
-            changeIntro(true)
+        uiState.value?.let {
+            if (intro < it.currentIntro) {
+                changeIntro(false)
+            } else if (intro > it.currentIntro) {
+                changeIntro(true)
+            }
         }
     }
 
     fun changeIntro(toNext: Boolean) {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    currentIntro = if (toNext) introRepository.getNextIntro(_uiState.value.currentIntro)
-                    else introRepository.getPrevIntro(_uiState.value.currentIntro)
-                )
-            }
+            _uiState.value = OnboardingUiState(
+                currentIntro = if (toNext) {
+                    introDataSource.toNextIntro()
+                } else {
+                    introDataSource.toPreviousIntro()
+                },
+                isLastIntro = introDataSource.isLastIntro()
+            )
         }
     }
 }

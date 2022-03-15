@@ -36,9 +36,9 @@ class ViewPagerAdapter : ListAdapter<IntroItem, ViewPagerAdapter.PagerViewHolder
     inner class PagerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemIntroViewPagerBinding.bind(view)
 
-        fun bind(item: IntroItem) {
-            binding.itemViewPagerImageView.setImageResource(item.image)
-            binding.itemViewPagerTitleTextView.setText(item.title)
+        fun bind(item: IntroItem) = with(binding) {
+            itemViewPagerImageView.setImageResource(item.image)
+            itemViewPagerTitleTextView.setText(item.title)
         }
     }
 }
