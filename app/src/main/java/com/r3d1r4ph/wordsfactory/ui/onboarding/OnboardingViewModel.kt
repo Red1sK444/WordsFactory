@@ -5,13 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.data.intro.IntroDataSource
-import com.r3d1r4ph.wordsfactory.data.intro.IntroDataSourceImpl
 import com.r3d1r4ph.wordsfactory.data.intro.IntroItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OnboardingViewModel : ViewModel() {
-
-    private val introDataSource: IntroDataSource = IntroDataSourceImpl()
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
+    private val introDataSource: IntroDataSource
+) : ViewModel() {
 
     private val _uiState =
         MutableLiveData(
