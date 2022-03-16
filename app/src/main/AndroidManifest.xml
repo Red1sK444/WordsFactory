@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WordsFactory">
         <activity
-            android:name=".MenuActivity"
+            android:name=".ui.menu.MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory
+package com.r3d1r4ph.wordsfactory.ui.menu
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.DictionaryFragment
+import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivityMenuBinding
 
 class MenuActivity : AppCompatActivity() {
