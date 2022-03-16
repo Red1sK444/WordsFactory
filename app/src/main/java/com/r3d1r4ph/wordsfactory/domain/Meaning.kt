@@ -1,6 +1,6 @@
 package com.r3d1r4ph.wordsfactory.domain
 
 data class Meaning(
-    val description: String,
+    val definition: String,
     val example: String
 )

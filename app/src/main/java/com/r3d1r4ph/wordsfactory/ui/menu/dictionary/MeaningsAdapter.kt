@@ -20,7 +20,7 @@ class MeaningsAdapter : ListAdapter<Meaning, MeaningsAdapter.ViewHolder>(DIFF) {
     private companion object {
         val DIFF = object : DiffUtil.ItemCallback<Meaning>() {
             override fun areItemsTheSame(oldItem: Meaning, newItem: Meaning) =
-                oldItem.description == newItem.description
+                oldItem.definition == newItem.definition
 
             override fun areContentsTheSame(oldItem: Meaning, newItem: Meaning) =
                 oldItem == newItem
@@ -43,7 +43,7 @@ class MeaningsAdapter : ListAdapter<Meaning, MeaningsAdapter.ViewHolder>(DIFF) {
         private val binding = ItemRecyclerMeaningBinding.bind(view)
 
         fun bind(meaning: Meaning) = with(binding) {
-            itemMeaningTextView.text = meaning.description
+            itemMeaningDefinitionTextView.text = meaning.definition
 
             val spannableExample =
                 SpannableString("${binding.root.context.resources.getString(R.string.meaning_example_start)}${meaning.example}")
