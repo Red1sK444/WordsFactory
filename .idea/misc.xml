@@ -3,10 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/asd.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/bg_bottom_nav.xml" value="0.33" />
         <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/bg_splash_screen.xml" value="0.3915" />
         <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/ic_launcher_background.xml" value="0.272" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/ic_tab_default.xml" value="0.3" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/ic_tab_selected.xml" value="0.3" />
         <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/img_splash_screen.xml" value="0.3915" />
-        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/activity_main.xml" value="0.5018115942028986" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/drawable/selector_tab_indicator_dot.xml" value="0.116" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/activity_main.xml" value="0.26973684210526316" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/activity_menu.xml" value="0.2851851851851852" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/activity_onboarding.xml" value="0.5" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/item_intro_view_pager.xml" value="0.2803442028985507" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/item_onboarding_view_pager.xml" value="0.3383152173913043" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/layout/item_page.xml" value="1.1" />
+        <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/menu/botton_nav_menu.xml" value="0.21296296296296297" />
         <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.315" />
         <entry key="..\:/Android Studio Projects/WordsFactory/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.315" />
       </map>

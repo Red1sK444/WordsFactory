@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WordsFactory</string>
+
+    <string name="bottom_nav_item_dictionary">Dictionary</string>
+    <string name="bottom_nav_item_training">Training</string>
+    <string name="bottom_nav_item_video">Video</string>
 </resources>
