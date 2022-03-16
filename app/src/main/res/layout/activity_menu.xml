@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_bottom_nav"
         app:itemIconTint="@color/item_bottom_nav_selector"
+        app:itemTextAppearanceActive="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
+        app:itemTextAppearanceInactive="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
         app:itemTextColor="@color/item_bottom_nav_selector"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
