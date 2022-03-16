@@ -9,7 +9,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/dictionarySearchTextInputLayout"
         style="@style/Widget.Design.TextInputEditText.MyTextInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dictionarySearchTextInputEditText"
             style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText.MyTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +37,7 @@
         android:text="Cooking"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/dictionarySearchTextInputLayout" />
 
     <TextView
         android:id="@+id/dictionaryTranscriptionTextView"
@@ -47,7 +48,8 @@
         android:text="[ˈkʊkɪŋ]"
         android:textColor="@color/orange"
         app:layout_constraintBottom_toBottomOf="@+id/dictionaryWordTextView"
-        app:layout_constraintStart_toEndOf="@+id/dictionaryWordTextView" />
+        app:layout_constraintStart_toEndOf="@+id/dictionaryWordTextView"
+        app:layout_constraintTop_toTopOf="@+id/dictionaryWordTextView" />
 
     <ImageButton
         android:id="@+id/dictionaryVolumeImageButton"
@@ -100,8 +102,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="11dp"
-        android:paddingBottom="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/dictionaryAddButton"
         app:layout_constraintEnd_toStartOf="@id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toBottomOf="@+id/dictionaryMeaningsTextView" />
@@ -135,15 +136,14 @@
         android:id="@+id/dictionaryNoWordImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
         android:adjustViewBounds="true"
         android:src="@drawable/img_no_word"
         app:layout_constraintBottom_toTopOf="@+id/dictionaryNoWordTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@+id/dictionarySearchTextInputLayout"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:ignore="ContentDescription" />
 
     <TextView

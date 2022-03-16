@@ -9,5 +9,5 @@ interface DictionaryDAO {
     @GET("v2/entries/en/{word}")
     suspend fun getDictionary(
         @Path("word") word: String
-    ): Response<List<DictionaryDAO>>
+    ): Response<List<DictionaryDTO>>
 }

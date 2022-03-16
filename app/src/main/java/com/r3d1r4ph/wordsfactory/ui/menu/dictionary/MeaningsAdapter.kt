@@ -45,8 +45,14 @@ class MeaningsAdapter : ListAdapter<Meaning, MeaningsAdapter.ViewHolder>(DIFF) {
         fun bind(meaning: Meaning) = with(binding) {
             itemMeaningDefinitionTextView.text = meaning.definition
 
+            if (meaning.example == null) {
+                itemMeaningExampleTextView.visibility = View.GONE
+                return
+            }
+            itemMeaningExampleTextView.visibility = View.VISIBLE
+
             val spannableExample =
-                SpannableString("${binding.root.context.resources.getString(R.string.meaning_example_start)}${meaning.example}")
+                SpannableString("${binding.root.context.resources.getString(R.string.meaning_example_start)} ${meaning.example}")
 
             spannableExample.setSpan(
                 ForegroundColorSpan(ContextCompat.getColor(binding.root.context, R.color.blue)),

@@ -5,43 +5,48 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-    <View
-        android:id="@+id/view"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemMeaningCardView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_meaning" />
-
-    <TextView
-        android:id="@+id/itemMeaningDefinitionTextView"
-        style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="The practice or skill of preparing food by combining, mixing, and heating ingredients."
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/itemMeaningExampleTextView"
-        style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Example: he developed an interest in cooking."
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemMeaningDefinitionTextView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/itemMeaningDefinitionTextView"
+                style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="The practice or skill of preparing food by combining, mixing, and heating ingredients."
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/itemMeaningExampleTextView"
+                style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Example: he developed an interest in cooking."
+                android:textAlignment="textStart"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

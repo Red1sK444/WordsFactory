@@ -9,5 +9,5 @@
     <string name="dictionary_add_to_dictionary">Add to Dictionary</string>
     <string name="dictionary_no_word">No word</string>
     <string name="dictionary_no_word_description">Input something to find it in dictionary</string>
-    <string name="meaning_example_start">Example: </string>
+    <string name="meaning_example_start">Example:</string>
 </resources>
