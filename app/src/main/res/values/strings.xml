@@ -4,4 +4,9 @@
     <string name="bottom_nav_item_dictionary">Dictionary</string>
     <string name="bottom_nav_item_training">Training</string>
     <string name="bottom_nav_item_video">Video</string>
+    <string name="dictionary_part_of_speech">Part of Speech:</string>
+    <string name="dictionary_meanings">Meanings:</string>
+    <string name="dictionary_add_to_dictionary">Add to Dictionary</string>
+    <string name="dictionary_no_word">No word</string>
+    <string name="dictionary_no_word_description">Input something to find it in dictionary</string>
 </resources>
