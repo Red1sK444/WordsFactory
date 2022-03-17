@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DictionaryDTO(
     val word: String,
-    val phonetic: String = "",
+    val phonetic: String? = null,
     val phonetics: List<PhoneticDTO>,
     val meanings: List<MeaningDTO>
 ) {
@@ -22,7 +22,7 @@ data class DictionaryDTO(
 
 @Serializable
 data class PhoneticDTO(
-    val text: String,
+    val text: String = "",
     val audio: String
 )
 

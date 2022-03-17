@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.FragmentDictionaryBinding
+import com.r3d1r4ph.wordsfactory.domain.Dictionary
 import java.io.IOException
 import java.util.*
 
@@ -60,11 +61,10 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             with(viewBinding) {
-                if (uiState.noWord) {
+                if (uiState.noWord || uiState.dictionary?.phonetic.isNullOrEmpty()) {
                     dictionaryMatchWordGroup.visibility = View.GONE
                     dictionaryNoWordGroup.visibility = View.VISIBLE
                     return@observe
@@ -73,24 +73,27 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
                 dictionaryMatchWordGroup.visibility = View.VISIBLE
                 dictionaryNoWordGroup.visibility = View.GONE
 
-                uiState.dictionary?.let {
-                    dictionaryWordTextView.text =
-                        "${it.word.first().uppercase(Locale.ENGLISH)}${it.word.substring(1)}"
-                    dictionaryTranscriptionTextView.text = it.phonetic
-                    dictionarySpeechPartTextView.text = "${
-                        it.partOfSpeech.first().uppercase(Locale.ENGLISH)
-                    }${it.partOfSpeech.substring(1)}"
-                    meaningsAdapter.submitList(it.meanings)
-
-                    try {
-                        mediaPlayer.reset()
-                        mediaPlayer.setDataSource(it.audio)
-                        mediaPlayer.prepareAsync()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
+                uiState.dictionary?.let(::fillWithWordInfo)
             }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun fillWithWordInfo(dictionary: Dictionary) = with(viewBinding) {
+        dictionaryWordTextView.text =
+            "${dictionary.word.first().uppercase(Locale.ENGLISH)}${dictionary.word.substring(1)}"
+        dictionaryTranscriptionTextView.text = dictionary.phonetic
+        dictionarySpeechPartTextView.text = "${
+            dictionary.partOfSpeech.first().uppercase(Locale.ENGLISH)
+        }${dictionary.partOfSpeech.substring(1)}"
+        meaningsAdapter.submitList(dictionary.meanings)
+
+        try {
+            mediaPlayer.reset()
+            mediaPlayer.setDataSource(dictionary.audio)
+            mediaPlayer.prepareAsync()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 }
