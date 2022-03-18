@@ -12,9 +12,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.FragmentDictionaryBinding
 import com.r3d1r4ph.wordsfactory.domain.Dictionary
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.util.*
 
+@AndroidEntryPoint
 class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
 
     private val viewBinding by viewBinding(FragmentDictionaryBinding::bind)
@@ -88,12 +90,18 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
         }${dictionary.partOfSpeech.substring(1)}"
         meaningsAdapter.submitList(dictionary.meanings)
 
-        try {
-            mediaPlayer.reset()
-            mediaPlayer.setDataSource(dictionary.audio)
-            mediaPlayer.prepareAsync()
-        } catch (e: IOException) {
-            e.printStackTrace()
+        mediaPlayer.reset()
+        if (dictionary.audio.isNotEmpty()) {
+            dictionaryVolumeImageButton.visibility = View.VISIBLE
+
+            try {
+                mediaPlayer.setDataSource(dictionary.audio)
+                mediaPlayer.prepareAsync()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        } else {
+            dictionaryVolumeImageButton.visibility = View.GONE
         }
     }
 }

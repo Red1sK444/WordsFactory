@@ -1,10 +1,13 @@
 package com.r3d1r4ph.wordsfactory.data.dictionary
 
-import com.r3d1r4ph.wordsfactory.data.Network
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Path
 
-class DictionaryService {
-    private val api = Network.retrofit.create(DictionaryDAO::class.java)
+interface DictionaryService {
 
-    suspend fun getDictionary(word: String) =
-        api.getDictionary(word)
+    @GET("v2/entries/en/{word}")
+    suspend fun getDictionary(
+        @Path("word") word: String
+    ): Response<List<DictionaryDTO>>
 }

@@ -9,7 +9,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.DictionaryFragment
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivityMenuBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MenuActivity : AppCompatActivity() {
 
     private val viewBinding by viewBinding(ActivityMenuBinding::bind, R.id.rootLayout)

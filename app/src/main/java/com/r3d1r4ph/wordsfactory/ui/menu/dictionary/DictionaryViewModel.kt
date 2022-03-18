@@ -4,12 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryService
+import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepository
+import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DictionaryViewModel : ViewModel() {
-
-    private val dictionaryService = DictionaryService()
+@HiltViewModel
+class DictionaryViewModel @Inject constructor(
+    private val dictionaryRepository: DictionaryRepository
+) : ViewModel() {
 
     private val _uiState = MutableLiveData(
         DictionaryUiState(
@@ -22,14 +26,12 @@ class DictionaryViewModel : ViewModel() {
 
     fun search(word: String) {
         viewModelScope.launch {
-            val response = dictionaryService.getDictionary(word)
-            if (response.isSuccessful) {
-                response.body()?.get(0)?.let {
-                    _uiState.value = DictionaryUiState(
-                        dictionary = it.toDomain(),
-                        noWord = false
-                    )
-                }
+            val response = dictionaryRepository.getDictionary(word)
+            if (response != null) {
+                _uiState.value = DictionaryUiState(
+                    dictionary = response,
+                    noWord = false
+                )
             } else {
                 _uiState.value = DictionaryUiState(
                     dictionary = null,
