@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.ui.menu.dictionary
+package com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler
 
 import android.text.Spannable
 import android.text.SpannableString

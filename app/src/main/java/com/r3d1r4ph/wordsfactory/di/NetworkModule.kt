@@ -1,11 +1,15 @@
-package com.r3d1r4ph.wordsfactory.data
+package com.r3d1r4ph.wordsfactory.di
 
+import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.r3d1r4ph.wordsfactory.BuildConfig
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryService
+import com.r3d1r4ph.wordsfactory.utils.interceptors.NetworkConnectionInterceptor
+import com.r3d1r4ph.wordsfactory.utils.interceptors.StatusCodeInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -22,7 +26,9 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
-    fun provideClient(): OkHttpClient = OkHttpClient.Builder()
+    fun provideClient(
+        @ApplicationContext appContext: Context
+    ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -30,6 +36,8 @@ class NetworkModule {
                 HttpLoggingInterceptor.Level.NONE
             }
         })
+        .addInterceptor(NetworkConnectionInterceptor(appContext))
+        .addInterceptor(StatusCodeInterceptor())
         .build()
 
     @Provides

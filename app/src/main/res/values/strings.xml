@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">WordsFactory</string>
-
     <string name="bottom_nav_item_dictionary">Dictionary</string>
     <string name="bottom_nav_item_training">Training</string>
     <string name="bottom_nav_item_video">Video</string>
@@ -10,4 +9,10 @@
     <string name="dictionary_no_word">No word</string>
     <string name="dictionary_no_word_description">Input something to find it in dictionary</string>
     <string name="meaning_example_start">Example:</string>
+
+    <string name="empty"/>
+
+    <string name="exception_no_internet_connection">No Internet Connection</string>
+    <string name="unknown_exception">UnknownError</string>
+    <string name="empty_field">Empty field</string>
 </resources>

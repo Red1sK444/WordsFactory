@@ -5,6 +5,8 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.FragmentDictionaryBinding
 import com.r3d1r4ph.wordsfactory.domain.Dictionary
+import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler.MeaningItemDecoration
+import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler.MeaningsAdapter
+import com.r3d1r4ph.wordsfactory.utils.exceptions.ExceptionHolder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.util.*
@@ -32,18 +37,29 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        setObserver()
+        setObservers()
     }
 
     private fun initView() {
         configureRecycler()
 
-        viewBinding.dictionarySearchTextInputLayout.setEndIconOnClickListener {
-            viewModel.search(viewBinding.dictionarySearchTextInputEditText.text.toString())
-        }
+        with(viewBinding) {
+            dictionarySearchTextInputEditText.addTextChangedListener {
+                dictionarySearchTextInputLayout.error = resources.getString(R.string.empty)
+                dictionarySearchTextInputLayout.isErrorEnabled = false
+            }
 
-        viewBinding.dictionaryVolumeImageButton.setOnClickListener {
-            mediaPlayer.start()
+            dictionarySearchTextInputLayout.setEndIconOnClickListener {
+                viewModel.search(dictionarySearchTextInputEditText.text.toString())
+            }
+
+            dictionaryAddButton.setOnClickListener {
+                viewModel.addToSaved()
+            }
+
+            dictionaryVolumeImageButton.setOnClickListener {
+                mediaPlayer.start()
+            }
         }
 
         mediaPlayer.setAudioAttributes(
@@ -63,10 +79,19 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
         }
     }
 
-    private fun setObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+    private fun setObservers() = with(viewModel) {
+        uiState.observe(viewLifecycleOwner) { uiState ->
             with(viewBinding) {
-                if (uiState.noWord || uiState.dictionary?.phonetic.isNullOrEmpty()) {
+
+                with(dictionarySearchTextInputLayout) {
+                    error = resources.getString(uiState.validation)
+                    isErrorEnabled = uiState.validation != R.string.empty
+                    if (isErrorEnabled) {
+                        return@observe
+                    }
+                }
+
+                if (uiState.noWord) {
                     dictionaryMatchWordGroup.visibility = View.GONE
                     dictionaryNoWordGroup.visibility = View.VISIBLE
                     return@observe
@@ -75,7 +100,29 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
                 dictionaryMatchWordGroup.visibility = View.VISIBLE
                 dictionaryNoWordGroup.visibility = View.GONE
 
+                dictionaryAddButton.visibility =
+                    if (uiState.isWordSaved) {
+                        View.GONE
+                    } else {
+                        View.VISIBLE
+                    }
+
                 uiState.dictionary?.let(::fillWithWordInfo)
+            }
+        }
+
+        exception.observe(viewLifecycleOwner) { exception ->
+            val message = when (exception) {
+                is ExceptionHolder.Resource -> resources.getString(exception.messageId)
+                is ExceptionHolder.Server -> exception.message
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        loading.observe(viewLifecycleOwner) { loading ->
+            with(viewBinding) {
+                dictionarySearchTextInputLayout.isEndIconVisible = !loading
+                dictionaryAddButton.isEnabled = !loading
             }
         }
     }
@@ -85,9 +132,11 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
         dictionaryWordTextView.text =
             "${dictionary.word.first().uppercase(Locale.ENGLISH)}${dictionary.word.substring(1)}"
         dictionaryTranscriptionTextView.text = dictionary.phonetic
+
         dictionarySpeechPartTextView.text = "${
             dictionary.partOfSpeech.first().uppercase(Locale.ENGLISH)
         }${dictionary.partOfSpeech.substring(1)}"
+
         meaningsAdapter.submitList(dictionary.meanings)
 
         mediaPlayer.reset()

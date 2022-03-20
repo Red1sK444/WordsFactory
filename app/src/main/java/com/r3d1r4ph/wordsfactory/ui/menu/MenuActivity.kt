@@ -6,15 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.DictionaryFragment
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivityMenuBinding
+import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.DictionaryFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MenuActivity : AppCompatActivity() {
 
     private val viewBinding by viewBinding(ActivityMenuBinding::bind, R.id.rootLayout)
+    private var currentTag = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,9 @@ class MenuActivity : AppCompatActivity() {
     private fun performBottomNavigation(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.dictionaryItem -> {
-                navigateToFragment(DictionaryFragment.TAG, DictionaryFragment.newInstance())
+                if (currentTag != DictionaryFragment.TAG) {
+                    navigateToFragment(DictionaryFragment.TAG, DictionaryFragment.newInstance())
+                }
             }
             R.id.trainingItem -> {
                 //TODO navigateToTrainingFragment
@@ -54,5 +57,6 @@ class MenuActivity : AppCompatActivity() {
                 tag
             )
         }
+        currentTag = tag
     }
 }

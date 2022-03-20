@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.ui.menu.dictionary
+package com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler
 
 import android.graphics.Rect
 import android.view.View

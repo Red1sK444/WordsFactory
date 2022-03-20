@@ -9,5 +9,5 @@ interface DictionaryService {
     @GET("v2/entries/en/{word}")
     suspend fun getDictionary(
         @Path("word") word: String
-    ): Response<List<DictionaryDTO>>
+    ): Response<List<DictionaryDto>>
 }
