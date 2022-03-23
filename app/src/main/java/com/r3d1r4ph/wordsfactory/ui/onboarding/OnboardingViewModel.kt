@@ -3,57 +3,45 @@ package com.r3d1r4ph.wordsfactory.ui.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.r3d1r4ph.wordsfactory.data.intro.IntroDataSource
-import com.r3d1r4ph.wordsfactory.data.intro.IntroItem
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import com.r3d1r4ph.wordsfactory.R
+import com.r3d1r4ph.wordsfactory.domain.IntroItem
 
-@HiltViewModel
-class OnboardingViewModel @Inject constructor(
-    private val introDataSource: IntroDataSource
-) : ViewModel() {
+class OnboardingViewModel : ViewModel() {
 
     private val _uiState =
         MutableLiveData(
             OnboardingUiState(
-                currentIntro = introDataSource.getCurrentIntro(),
-                isLastIntro = introDataSource.isLastIntro()
+                currentIntro = IntroEnum.FIRST
             )
         )
     val uiState: LiveData<OnboardingUiState>
         get() = _uiState
 
-    private val _introList = MutableLiveData<List<IntroItem>>()
-    val introList: LiveData<List<IntroItem>>
-        get() = _introList
-
-    fun loadIntroList() {
-        viewModelScope.launch {
-            _introList.value = introDataSource.getIntroList()
-        }
-    }
+    val introList = listOf(
+        IntroItem(
+            image = R.drawable.img_onboarding_1,
+            title = R.string.onboarding_intro_1_title
+        ),
+        IntroItem(
+            image = R.drawable.img_onboarding_2,
+            title = R.string.onboarding_intro_2_title
+        ),
+        IntroItem(
+            image = R.drawable.img_onboarding_3,
+            title = R.string.onboarding_intro_3_title
+        )
+    )
 
     fun updateCurrentIntroByGesture(intro: Int) {
-        uiState.value?.let {
-            if (intro < it.currentIntro) {
-                changeIntro(false)
-            } else if (intro > it.currentIntro) {
-                changeIntro(true)
-            }
-        }
+        _uiState.value = OnboardingUiState(
+            currentIntro = IntroEnum.values()[intro]
+        )
     }
 
-    fun changeIntro(toNext: Boolean) {
-        viewModelScope.launch {
-            _uiState.value = OnboardingUiState(
-                currentIntro = if (toNext) {
-                    introDataSource.toNextIntro()
-                } else {
-                    introDataSource.toPreviousIntro()
-                },
-                isLastIntro = introDataSource.isLastIntro()
+    fun toNextIntro() {
+        _uiState.value = uiState.value?.let {
+            OnboardingUiState(
+                currentIntro = IntroEnum.values()[it.currentIntro.ordinal + 1]
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.data.intro
+package com.r3d1r4ph.wordsfactory.domain
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

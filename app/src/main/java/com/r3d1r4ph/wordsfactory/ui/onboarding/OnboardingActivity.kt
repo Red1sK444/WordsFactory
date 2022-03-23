@@ -9,9 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivityOnboardingBinding
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
 
     private val viewBinding by viewBinding(ActivityOnboardingBinding::bind, R.id.rootLayout)
@@ -28,13 +26,13 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initView() {
         configureViewPager()
-        viewModel.loadIntroList()
         viewBinding.onboardingSkipButton.setOnClickListener { openSignUpScreen() }
     }
 
     private fun configureViewPager() {
         val viewPager = viewBinding.onboardingViewPager
         viewPager.adapter = viewPagerAdapter
+        viewPagerAdapter.submitList(viewModel.introList)
 
         TabLayoutMediator(
             viewBinding.onboardingTabLayout,
@@ -50,19 +48,14 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        viewModel.introList.observe(this) { list ->
-            viewPagerAdapter.submitList(list)
-        }
-
         viewModel.uiState.observe(this) { uiState ->
-            swipeToIntro(uiState.currentIntro)
+            viewBinding.onboardingViewPager.setCurrentItem(uiState.currentIntro.ordinal, true)
 
             with(viewBinding.onboardingNextButton) {
-                if (uiState.isLastIntro) {
-                    text = resources.getString(R.string.onboarding_button_lets_start)
+                text = resources.getString(uiState.currentIntro.buttonTextId)
+                if (uiState.currentIntro.openSignUpScreen) {
                     setOnClickListener { openSignUpScreen() }
                 } else {
-                    text = resources.getString(R.string.onboarding_button_next)
                     setOnClickListener { nextIntro() }
                 }
             }
@@ -75,10 +68,6 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun nextIntro() {
-        viewModel.changeIntro(toNext = true)
-    }
-
-    private fun swipeToIntro(intro: Int) {
-        viewBinding.onboardingViewPager.setCurrentItem(intro, true)
+        viewModel.toNextIntro()
     }
 }

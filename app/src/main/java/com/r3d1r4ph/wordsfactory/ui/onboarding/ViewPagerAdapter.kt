@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.data.intro.IntroItem
 import com.r3d1r4ph.wordsfactory.databinding.ItemIntroViewPagerBinding
+import com.r3d1r4ph.wordsfactory.domain.IntroItem
 
 class ViewPagerAdapter : ListAdapter<IntroItem, ViewPagerAdapter.PagerViewHolder>(DIFF) {
 
