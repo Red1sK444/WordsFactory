@@ -37,7 +37,6 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        setObservers()
     }
 
     private fun initView() {
@@ -68,6 +67,8 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build()
         )
+
+        setObservers()
     }
 
     private fun configureRecycler() {
