@@ -32,6 +32,9 @@ class OnboardingViewModel : ViewModel() {
         )
     )
 
+    fun getCurrentIntro(): IntroEnum? =
+        uiState.value?.currentIntro
+
     fun updateCurrentIntroByGesture(intro: Int) {
         _uiState.value = OnboardingUiState(
             currentIntro = IntroEnum.values()[intro]

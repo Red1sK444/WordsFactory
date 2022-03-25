@@ -24,9 +24,16 @@ class OnboardingActivity : AppCompatActivity() {
         setObservers()
     }
 
-    private fun initView() {
+    private fun initView() = with(viewBinding) {
         configureViewPager()
-        viewBinding.onboardingSkipButton.setOnClickListener { openSignUpScreen() }
+        onboardingSkipButton.setOnClickListener { openSignUpScreen() }
+        onboardingNextButton.setOnClickListener {
+            if (viewModel.getCurrentIntro() == IntroEnum.THIRD) {
+                openSignUpScreen()
+            } else {
+                nextIntro()
+            }
+        }
     }
 
     private fun configureViewPager() {
@@ -49,15 +56,11 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setObservers() {
         viewModel.uiState.observe(this) { uiState ->
-            viewBinding.onboardingViewPager.setCurrentItem(uiState.currentIntro.ordinal, true)
+            with(viewBinding) {
+                onboardingViewPager.setCurrentItem(uiState.currentIntro.ordinal, true)
 
-            with(viewBinding.onboardingNextButton) {
-                text = resources.getString(uiState.currentIntro.buttonTextId)
-                if (uiState.currentIntro.openSignUpScreen) {
-                    setOnClickListener { openSignUpScreen() }
-                } else {
-                    setOnClickListener { nextIntro() }
-                }
+                onboardingNextButton.text =
+                    resources.getString(uiState.currentIntro.getButtonTextRes())
             }
         }
     }
