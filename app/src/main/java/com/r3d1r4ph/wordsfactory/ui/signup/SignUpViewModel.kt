@@ -1,5 +1,6 @@
 package com.r3d1r4ph.wordsfactory.ui.signup
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,6 +46,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    @StringRes
     private fun emptyFieldCheck(
         text: String
     ): Int = if (text.isEmpty()) {
@@ -53,6 +55,7 @@ class SignUpViewModel @Inject constructor(
         R.string.empty
     }
 
+    @StringRes
     private fun emailFieldCheck(
         text: String
     ): Int {

@@ -23,11 +23,10 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         viewModel.checkAuth()
-        setObserver()
         initView()
     }
 
-    private fun setObserver() {
+    private fun initView() {
         viewModel.uiState.observe(this) { uiState ->
             viewBinding.signUpButton.isEnabled = !uiState.openDictionaryScreen
             if (uiState.openDictionaryScreen) {
@@ -36,9 +35,7 @@ class SignUpActivity : AppCompatActivity() {
                 setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
             }
         }
-    }
 
-    private fun initView() {
         setErrorDismisses()
 
         viewBinding.signUpButton.setOnClickListener {
