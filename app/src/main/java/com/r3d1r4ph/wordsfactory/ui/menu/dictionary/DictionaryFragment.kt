@@ -45,8 +45,7 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
 
         with(viewBinding) {
             dictionarySearchTextInputEditText.addTextChangedListener {
-                dictionarySearchTextInputLayout.error = resources.getString(R.string.empty)
-                dictionarySearchTextInputLayout.isErrorEnabled = false
+                viewModel.dismissValidationError()
             }
 
             dictionarySearchTextInputLayout.setEndIconOnClickListener {
