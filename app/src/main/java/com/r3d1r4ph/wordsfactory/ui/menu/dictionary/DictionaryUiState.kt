@@ -9,5 +9,5 @@ data class DictionaryUiState(
     val isWordSaved: Boolean = false,
     val noWord: Boolean = true,
     val isLoading: Boolean = false,
-    @StringRes val validation: Int = R.string.empty
+    @StringRes val validation: Int? = null
 )

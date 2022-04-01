@@ -40,8 +40,8 @@ class DictionaryRepositoryImpl @Inject constructor(
         dictionaryDao.insertDictionary(dictionaryEntity = DictionaryEntity.domainToEntity(dictionary))
         meaningDao.insertMeanings(dictionary.meanings.map {
             MeaningEntity.domainToEntity(
-                it,
-                dictionary.word
+                domain = it,
+                word = dictionary.word
             )
         })
     }

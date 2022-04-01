@@ -84,8 +84,8 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
         uiState.observe(viewLifecycleOwner) { uiState ->
 
             with(viewBinding.dictionarySearchTextInputLayout) {
-                error = resources.getString(uiState.validation)
-                isErrorEnabled = uiState.validation != R.string.empty
+                error = resources.getString(uiState.validation ?: R.string.empty)
+                isErrorEnabled = uiState.validation != null
                 if (isErrorEnabled) {
                     return@observe
                 }

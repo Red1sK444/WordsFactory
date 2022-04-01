@@ -101,7 +101,7 @@ class DictionaryViewModel @Inject constructor(
             _uiState.value?.let {
                 _uiState.value =
                     it.copy(
-                        validation = R.string.empty
+                        validation = null
                     )
             }
             true
@@ -143,7 +143,7 @@ class DictionaryViewModel @Inject constructor(
             _uiState.value?.let {
                 _uiState.postValue(
                     it.copy(
-                        validation = R.string.empty
+                        validation = null
                     )
                 )
             }

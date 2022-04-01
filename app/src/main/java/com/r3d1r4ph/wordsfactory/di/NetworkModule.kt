@@ -42,7 +42,7 @@ class NetworkModule {
 
     @Provides
     fun provideBaseUrl(): String =
-        "https://api.dictionaryapi.dev/api/"
+        BuildConfig.SERVER_URL
 
     @Provides
     fun provideMediaType(): MediaType =
