@@ -93,6 +93,10 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
             }
 
             with(viewBinding) {
+
+                dictionarySearchTextInputLayout.isEndIconVisible = !uiState.isLoading
+                dictionaryAddButton.isEnabled = !uiState.isLoading
+
                 if (uiState.noWord) {
                     dictionaryMatchWordGroup.isVisible = false
                     dictionaryNoWordGroup.isVisible = true
@@ -114,13 +118,6 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
                 is ExceptionHolder.Server -> exception.message
             }
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
-
-        loading.observe(viewLifecycleOwner) { loading ->
-            with(viewBinding) {
-                dictionarySearchTextInputLayout.isEndIconVisible = !loading
-                dictionaryAddButton.isEnabled = !loading
-            }
         }
     }
 

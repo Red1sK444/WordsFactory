@@ -25,24 +25,28 @@ class DictionaryViewModel @Inject constructor(
     val exception: LiveData<ExceptionHolder>
         get() = _exception
 
-    private val _loading = MutableLiveData(false)
-    val loading: LiveData<Boolean>
-        get() = _loading
-
     fun search(word: String) {
         if (!isWordCorrect(word)) {
             return
         }
-        _loading.value = true
+
+        _uiState.value?.let {
+            _uiState.value =
+                it.copy(
+                    isLoading = true
+                )
+        }
 
         viewModelScope.launch {
             when (val response = dictionaryRepository.getDictionary(word)) {
                 is ResultWrapper.Success -> {
                     val dictionary = response.value
-                    _uiState.value = DictionaryUiState(
-                        dictionary = dictionary,
-                        isWordSaved = isWordSaved(word),
-                        noWord = false
+                    _uiState.postValue(
+                        DictionaryUiState(
+                            dictionary = dictionary,
+                            isWordSaved = isWordSaved(word),
+                            noWord = false
+                        )
                     )
                 }
                 is ResultWrapper.Failure -> {
@@ -51,26 +55,38 @@ class DictionaryViewModel @Inject constructor(
                             savedSearch(word)
                         }
                         is NoWordException, is NotFoundException -> {
-                            _uiState.value = DictionaryUiState(
-                                noWord = true
+                            _uiState.postValue(
+                                DictionaryUiState(
+                                    noWord = true
+                                )
                             )
                         }
                         is StatusCodeException -> {
-                            _exception.value = when (val message = exception.message) {
-                                null -> ExceptionHolder.Resource(R.string.unknown_exception)
-                                else -> ExceptionHolder.Server(message)
-                            }
+                            _exception.postValue(
+                                when (val message = exception.message) {
+                                    null -> ExceptionHolder.Resource(R.string.unknown_exception)
+                                    else -> ExceptionHolder.Server(message)
+                                }
+                            )
                         }
                         else -> {
-                            _exception.value = ExceptionHolder.Resource(
-                                R.string.unknown_exception
+                            _exception.postValue(
+                                ExceptionHolder.Resource(
+                                    R.string.unknown_exception
+                                )
                             )
                         }
                     }
 
                 }
             }
-            _loading.value = false
+
+            _uiState.value?.let {
+                _uiState.value =
+                    it.copy(
+                        isLoading = false
+                    )
+            }
         }
     }
 
