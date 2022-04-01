@@ -8,7 +8,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override suspend fun insertAuth(auth: Auth) {
-        authDao.insert(auth.toEntity())
+        authDao.insert(AuthEntity.domainToEntity(auth))
     }
 
     override suspend fun checkAuth() =

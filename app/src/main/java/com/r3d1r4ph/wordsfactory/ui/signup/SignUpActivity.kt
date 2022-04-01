@@ -10,7 +10,6 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivitySignUpBinding
-import com.r3d1r4ph.wordsfactory.domain.Auth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,11 +21,11 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        viewModel.checkAuth()
+        observeViewModel()
         initView()
     }
 
-    private fun initView() {
+    private fun observeViewModel() {
         viewModel.uiState.observe(this) { uiState ->
             viewBinding.signUpButton.isEnabled = !uiState.openDictionaryScreen
             if (uiState.openDictionaryScreen) {
@@ -35,17 +34,17 @@ class SignUpActivity : AppCompatActivity() {
                 setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
             }
         }
+    }
 
+    private fun initView() {
         setErrorDismisses()
 
         viewBinding.signUpButton.setOnClickListener {
             with(viewBinding) {
                 viewModel.signUp(
-                    Auth(
-                        name = signUpNameTextInputEditText.text.toString(),
-                        email = signUpEmailTextInputEditText.text.toString(),
-                        password = signUpPasswordTextInputEditText.text.toString()
-                    )
+                    name = signUpNameTextInputEditText.text.toString(),
+                    email = signUpEmailTextInputEditText.text.toString(),
+                    password = signUpPasswordTextInputEditText.text.toString()
                 )
             }
         }
@@ -53,21 +52,16 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun setErrorDismisses() = with(viewBinding) {
         signUpNameTextInputEditText.addTextChangedListener {
-            setErrorDismiss(signUpNameTextInputLayout)
+            viewModel.dismissError(InputFieldEnum.NAME)
         }
 
         signUpEmailTextInputEditText.addTextChangedListener {
-            setErrorDismiss(signUpEmailTextInputLayout)
+            viewModel.dismissError(InputFieldEnum.EMAIL)
         }
 
         signUpPasswordTextInputEditText.addTextChangedListener {
-            setErrorDismiss(signUpPasswordTextInputLayout)
+            viewModel.dismissError(InputFieldEnum.PASSWORD)
         }
-    }
-
-    private fun setErrorDismiss(textInputLayout: TextInputLayout) {
-        textInputLayout.error = resources.getString(R.string.empty)
-        textInputLayout.isErrorEnabled = false
     }
 
     private fun setErrors(
@@ -75,7 +69,6 @@ class SignUpActivity : AppCompatActivity() {
         @StringRes emailError: Int,
         @StringRes passwordError: Int
     ) = with(viewBinding) {
-
         setError(signUpNameTextInputLayout, nameError)
         setError(signUpEmailTextInputLayout, emailError)
         setError(signUpPasswordTextInputLayout, passwordError)

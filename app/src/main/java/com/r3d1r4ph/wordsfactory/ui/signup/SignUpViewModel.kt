@@ -17,55 +17,85 @@ class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
+    private companion object {
+        const val AT_SIGN = '@'
+    }
+
     private val _uiState = MutableLiveData(SignUpUiState())
     val uiState: LiveData<SignUpUiState>
         get() = _uiState
 
+    init {
+        checkAuth()
+    }
+
     fun signUp(
-        auth: Auth
+        name: String,
+        email: String,
+        password: String
     ) {
-        val nameError = emptyFieldCheck(auth.name)
-        val emailError = emailFieldCheck(auth.email)
-        val passwordError = emptyFieldCheck(auth.password)
+        val nameError = emptyFieldCheck(name)
+        val emailError = emailFieldCheck(email)
+        val passwordError = emptyFieldCheck(password)
 
         viewModelScope.launch {
-            if (nameError == R.string.empty
-                && emailError == R.string.empty
-                && passwordError == R.string.empty
+            if (nameError == null
+                && emailError == null
+                && passwordError == null
             ) {
-                authorize(auth)
+                authorize(
+                    Auth(
+                        name = name,
+                        email = email,
+                        password = password
+                    )
+                )
             }
 
-            _uiState.value =
+            _uiState.postValue(
                 SignUpUiState(
-                    nameError = nameError,
-                    emailError = emailError,
-                    passwordError = passwordError,
+                    nameError = nameError ?: R.string.empty,
+                    emailError = emailError ?: R.string.empty,
+                    passwordError = passwordError ?: R.string.empty,
                     openDictionaryScreen = authRepository.checkAuth()
                 )
+            )
+
+        }
+    }
+
+    fun dismissError(inputFieldEnum: InputFieldEnum) {
+        viewModelScope.launch {
+            _uiState.value?.let {
+                _uiState.postValue(
+                    it.copy(
+                        nameError = if (inputFieldEnum == InputFieldEnum.NAME) R.string.empty else it.nameError,
+                        emailError = if (inputFieldEnum == InputFieldEnum.EMAIL) R.string.empty else it.emailError,
+                        passwordError = if (inputFieldEnum == InputFieldEnum.PASSWORD) R.string.empty else it.passwordError
+                    )
+                )
+            }
         }
     }
 
     @StringRes
     private fun emptyFieldCheck(
         text: String
-    ): Int = if (text.isEmpty()) {
+    ): Int? = if (text.isBlank()) {
         R.string.signup_empty_field
     } else {
-        R.string.empty
+        null
     }
 
     @StringRes
     private fun emailFieldCheck(
         text: String
-    ): Int {
+    ): Int? {
         val empty = emptyFieldCheck(text)
-        return if (empty != R.string.empty) {
-            empty
-        } else if (!text.contains('@')) {
+        return empty ?: if (!text.contains(AT_SIGN)) {
             R.string.signup_not_e_mail
         } else {
-            R.string.empty
+            null
         }
     }
 
@@ -73,9 +103,11 @@ class SignUpViewModel @Inject constructor(
         authRepository.insertAuth(auth)
     }
 
-    fun checkAuth() {
+    private fun checkAuth() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value?.copy(openDictionaryScreen = authRepository.checkAuth())
+            _uiState.postValue(
+                _uiState.value?.copy(openDictionaryScreen = authRepository.checkAuth())
+            )
         }
     }
 
