@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ItemIntroViewPagerBinding
-import com.r3d1r4ph.wordsfactory.domain.IntroItem
 
 class ViewPagerAdapter : ListAdapter<IntroEnum, ViewPagerAdapter.PagerViewHolder>(DIFF) {
 
@@ -30,15 +29,15 @@ class ViewPagerAdapter : ListAdapter<IntroEnum, ViewPagerAdapter.PagerViewHolder
         )
 
     override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
-        holder.bind(getItem(position).getIntroItem())
+        holder.bind(getItem(position))
     }
 
     inner class PagerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemIntroViewPagerBinding.bind(view)
 
-        fun bind(item: IntroItem) = with(binding) {
-            itemViewPagerImageView.setImageResource(item.image)
-            itemViewPagerTitleTextView.setText(item.title)
+        fun bind(item: IntroEnum) = with(binding) {
+            itemViewPagerImageView.setImageResource(item.getIntroImage())
+            itemViewPagerTitleTextView.setText(item.getIntroTitle())
         }
     }
 }
