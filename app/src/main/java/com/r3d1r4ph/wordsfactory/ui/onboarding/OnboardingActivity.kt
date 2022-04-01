@@ -39,7 +39,7 @@ class OnboardingActivity : AppCompatActivity() {
     private fun configureViewPager() {
         val viewPager = viewBinding.onboardingViewPager
         viewPager.adapter = viewPagerAdapter
-        viewPagerAdapter.submitList(IntroEnum.values().toMutableList())
+        viewPagerAdapter.submitList(viewModel.introList)
 
         TabLayoutMediator(
             viewBinding.onboardingTabLayout,

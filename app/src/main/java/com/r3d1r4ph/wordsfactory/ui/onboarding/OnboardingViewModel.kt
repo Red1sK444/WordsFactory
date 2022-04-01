@@ -15,6 +15,8 @@ class OnboardingViewModel : ViewModel() {
     val uiState: LiveData<OnboardingUiState>
         get() = _uiState
 
+    val introList = IntroEnum.values().toMutableList()
+
     fun getCurrentIntro(): IntroEnum? =
         uiState.value?.currentIntro
 
