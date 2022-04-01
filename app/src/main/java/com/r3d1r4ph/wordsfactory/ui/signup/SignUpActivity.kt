@@ -65,19 +65,19 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setErrors(
-        @StringRes nameError: Int,
-        @StringRes emailError: Int,
-        @StringRes passwordError: Int
+        @StringRes nameError: Int?,
+        @StringRes emailError: Int?,
+        @StringRes passwordError: Int?
     ) = with(viewBinding) {
         setError(signUpNameTextInputLayout, nameError)
         setError(signUpEmailTextInputLayout, emailError)
         setError(signUpPasswordTextInputLayout, passwordError)
     }
 
-    private fun setError(textInputLayout: TextInputLayout, @StringRes errorId: Int) {
+    private fun setError(textInputLayout: TextInputLayout, @StringRes errorId: Int?) {
         with(textInputLayout) {
-            error = resources.getString(errorId)
-            isErrorEnabled = errorId != R.string.empty
+            error = resources.getString(errorId ?: R.string.empty)
+            isErrorEnabled = errorId != null
         }
     }
 

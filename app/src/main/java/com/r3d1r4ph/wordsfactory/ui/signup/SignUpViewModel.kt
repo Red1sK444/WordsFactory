@@ -54,9 +54,9 @@ class SignUpViewModel @Inject constructor(
 
             _uiState.postValue(
                 SignUpUiState(
-                    nameError = nameError ?: R.string.empty,
-                    emailError = emailError ?: R.string.empty,
-                    passwordError = passwordError ?: R.string.empty,
+                    nameError = nameError,
+                    emailError = emailError,
+                    passwordError = passwordError,
                     openDictionaryScreen = authRepository.checkAuth()
                 )
             )
@@ -69,9 +69,9 @@ class SignUpViewModel @Inject constructor(
             _uiState.value?.let {
                 _uiState.postValue(
                     it.copy(
-                        nameError = if (inputFieldEnum == InputFieldEnum.NAME) R.string.empty else it.nameError,
-                        emailError = if (inputFieldEnum == InputFieldEnum.EMAIL) R.string.empty else it.emailError,
-                        passwordError = if (inputFieldEnum == InputFieldEnum.PASSWORD) R.string.empty else it.passwordError
+                        nameError = if (inputFieldEnum == InputFieldEnum.NAME) null else it.nameError,
+                        emailError = if (inputFieldEnum == InputFieldEnum.EMAIL) null else it.emailError,
+                        passwordError = if (inputFieldEnum == InputFieldEnum.PASSWORD) null else it.passwordError
                     )
                 )
             }
@@ -79,22 +79,20 @@ class SignUpViewModel @Inject constructor(
     }
 
     @StringRes
-    private fun emptyFieldCheck(
-        text: String
-    ): Int? = if (text.isBlank()) {
-        R.string.signup_empty_field
-    } else {
-        null
-    }
+    private fun emptyFieldCheck(text: String): Int? =
+        if (text.isBlank()) {
+            R.string.signup_empty_field
+        } else {
+            null
+        }
 
     @StringRes
-    private fun emailFieldCheck(
-        text: String
-    ) = emptyFieldCheck(text) ?: if (!text.contains(AT_SIGN)) {
-        R.string.signup_not_e_mail
-    } else {
-        null
-    }
+    private fun emailFieldCheck(text: String) =
+        emptyFieldCheck(text) ?: if (!text.contains(AT_SIGN)) {
+            R.string.signup_not_e_mail
+        } else {
+            null
+        }
 
     private suspend fun authorize(auth: Auth) {
         authRepository.insertAuth(auth)
