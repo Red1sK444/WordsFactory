@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MenuActivity : AppCompatActivity() {
 
     private val viewBinding by viewBinding(ActivityMenuBinding::bind, R.id.rootLayout)
-    private var currentTag = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,15 +28,14 @@ class MenuActivity : AppCompatActivity() {
                 performBottomNavigation(item)
             }
             selectedItemId = R.id.dictionaryItem
+            setOnItemReselectedListener { }
         }
     }
 
     private fun performBottomNavigation(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.dictionaryItem -> {
-                if (currentTag != DictionaryFragment.TAG) {
-                    navigateToFragment(DictionaryFragment.TAG, DictionaryFragment.newInstance())
-                }
+                navigateToFragment(DictionaryFragment.TAG, DictionaryFragment.newInstance())
             }
             R.id.trainingItem -> {
                 //TODO navigateToTrainingFragment
@@ -57,6 +55,5 @@ class MenuActivity : AppCompatActivity() {
                 tag
             )
         }
-        currentTag = tag
     }
 }
