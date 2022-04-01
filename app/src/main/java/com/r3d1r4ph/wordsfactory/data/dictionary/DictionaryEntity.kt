@@ -13,7 +13,17 @@ data class DictionaryEntity(
     val phonetic: String,
     val audio: String,
     val partOfSpeech: String
-)
+) {
+    companion object {
+        fun domainToEntity(domain: Dictionary): DictionaryEntity =
+            DictionaryEntity(
+                word = domain.word,
+                phonetic = domain.phonetic.orEmpty(),
+                audio = domain.audio,
+                partOfSpeech = domain.partOfSpeech
+            )
+    }
+}
 
 data class DictionaryWithMeanings(
     @Embedded val dictionary: DictionaryEntity,

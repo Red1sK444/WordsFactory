@@ -14,7 +14,7 @@ data class DictionaryDto(
     fun toDomain(): Dictionary = Dictionary(
         word = word,
         phonetic = phonetic,
-        audio = phonetics.firstOrNull()?.audio ?: "",
+        audio = phonetics.firstOrNull()?.audio.orEmpty(),
         partOfSpeech = meanings[0].partOfSpeech,
         meanings = meanings[0].definitions.map { it.toDomain() }
     )

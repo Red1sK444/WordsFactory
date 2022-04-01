@@ -5,7 +5,6 @@ import androidx.room.*
 @Dao
 interface DictionaryDao {
 
-    @Transaction
     @Query("SELECT * FROM dictionary WHERE word=:word")
     suspend fun getWordDictionary(word: String): DictionaryWithMeanings?
 

@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -82,31 +83,26 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
 
     private fun setObservers() = with(viewModel) {
         uiState.observe(viewLifecycleOwner) { uiState ->
-            with(viewBinding) {
 
-                with(dictionarySearchTextInputLayout) {
-                    error = resources.getString(uiState.validation)
-                    isErrorEnabled = uiState.validation != R.string.empty
-                    if (isErrorEnabled) {
-                        return@observe
-                    }
+            with(viewBinding.dictionarySearchTextInputLayout) {
+                error = resources.getString(uiState.validation)
+                isErrorEnabled = uiState.validation != R.string.empty
+                if (isErrorEnabled) {
+                    return@observe
                 }
+            }
 
+            with(viewBinding) {
                 if (uiState.noWord) {
-                    dictionaryMatchWordGroup.visibility = View.GONE
-                    dictionaryNoWordGroup.visibility = View.VISIBLE
+                    dictionaryMatchWordGroup.isVisible = false
+                    dictionaryNoWordGroup.isVisible = true
                     return@observe
                 }
 
-                dictionaryMatchWordGroup.visibility = View.VISIBLE
-                dictionaryNoWordGroup.visibility = View.GONE
+                dictionaryMatchWordGroup.isVisible = true
+                dictionaryNoWordGroup.isVisible = false
 
-                dictionaryAddButton.visibility =
-                    if (uiState.isWordSaved) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
-                    }
+                dictionaryAddButton.isVisible = !uiState.isWordSaved
 
                 uiState.dictionary?.let(::fillWithWordInfo)
             }
@@ -142,7 +138,7 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
 
         mediaPlayer.reset()
         if (dictionary.audio.isNotEmpty()) {
-            dictionaryVolumeImageButton.visibility = View.VISIBLE
+            dictionaryVolumeImageButton.isVisible = true
 
             try {
                 mediaPlayer.setDataSource(dictionary.audio)
@@ -151,7 +147,7 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
                 e.printStackTrace()
             }
         } else {
-            dictionaryVolumeImageButton.visibility = View.GONE
+            dictionaryVolumeImageButton.isVisible = false
         }
     }
 }

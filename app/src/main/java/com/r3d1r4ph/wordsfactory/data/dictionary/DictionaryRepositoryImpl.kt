@@ -38,7 +38,12 @@ class DictionaryRepositoryImpl @Inject constructor(
 
 
     override suspend fun saveDictionary(dictionary: Dictionary) {
-        dictionaryDao.insertDictionary(dictionaryEntity = dictionary.toEntity())
-        meaningDao.insertMeanings(dictionary.meanings.map { it.toEntity(dictionary.word) })
+        dictionaryDao.insertDictionary(dictionaryEntity = DictionaryEntity.domainToEntity(dictionary))
+        meaningDao.insertMeanings(dictionary.meanings.map {
+            MeaningEntity.domainToEntity(
+                it,
+                dictionary.word
+            )
+        })
     }
 }

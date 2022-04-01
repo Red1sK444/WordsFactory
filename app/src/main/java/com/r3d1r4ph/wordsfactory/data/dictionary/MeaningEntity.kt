@@ -12,6 +12,15 @@ data class MeaningEntity(
     val definition: String,
     val example: String?
 ) {
+    companion object {
+        fun domainToEntity(domain: Meaning, word: String): MeaningEntity =
+            MeaningEntity(
+                dictionaryWord = word,
+                definition = domain.definition,
+                example = domain.example
+            )
+    }
+
     fun toDomain(): Meaning =
         Meaning(
             definition = definition,
