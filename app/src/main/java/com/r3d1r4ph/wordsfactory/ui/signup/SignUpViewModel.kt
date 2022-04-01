@@ -90,13 +90,10 @@ class SignUpViewModel @Inject constructor(
     @StringRes
     private fun emailFieldCheck(
         text: String
-    ): Int? {
-        val empty = emptyFieldCheck(text)
-        return empty ?: if (!text.contains(AT_SIGN)) {
-            R.string.signup_not_e_mail
-        } else {
-            null
-        }
+    ) = emptyFieldCheck(text) ?: if (!text.contains(AT_SIGN)) {
+        R.string.signup_not_e_mail
+    } else {
+        null
     }
 
     private suspend fun authorize(auth: Auth) {
