@@ -10,14 +10,14 @@ import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ItemIntroViewPagerBinding
 import com.r3d1r4ph.wordsfactory.domain.IntroItem
 
-class ViewPagerAdapter : ListAdapter<IntroItem, ViewPagerAdapter.PagerViewHolder>(DIFF) {
+class ViewPagerAdapter : ListAdapter<IntroEnum, ViewPagerAdapter.PagerViewHolder>(DIFF) {
 
     private companion object {
-        val DIFF = object : DiffUtil.ItemCallback<IntroItem>() {
-            override fun areItemsTheSame(oldItem: IntroItem, newItem: IntroItem) =
-                oldItem.title == newItem.title
+        val DIFF = object : DiffUtil.ItemCallback<IntroEnum>() {
+            override fun areItemsTheSame(oldItem: IntroEnum, newItem: IntroEnum) =
+                oldItem == newItem
 
-            override fun areContentsTheSame(oldItem: IntroItem, newItem: IntroItem) =
+            override fun areContentsTheSame(oldItem: IntroEnum, newItem: IntroEnum) =
                 oldItem == newItem
 
         }
@@ -30,7 +30,7 @@ class ViewPagerAdapter : ListAdapter<IntroItem, ViewPagerAdapter.PagerViewHolder
         )
 
     override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position).getIntroItem())
     }
 
     inner class PagerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
