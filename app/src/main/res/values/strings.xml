@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">WordsFactory</string>
+
+    <!-- Sign Up -->
     <string name="sign_up">Sign up</string>
     <string name="signup_create_your_account">Create your account</string>
     <string name="signup_name">Name</string>
@@ -8,4 +10,13 @@
     <string name="signup_empty_field">Поле не заполнено</string>
     <string name="signup_not_e_mail">Поле должно cодержать символ \'@\'</string>
     <string name="empty"/>
+
+    <!-- Onboarding -->
+    <string name="onboarding_intro_1_title">Learn anytime\nand anywhere</string>
+    <string name="onboarding_intro_2_title">Find a course\nfor you</string>
+    <string name="onboarding_intro_3_title">Improve your skills</string>
+    <string name="onboarding_intro_description">Quarantine is the perfect time to spend your\nday learning something new, from anywhere!</string>
+    <string name="onboarding_button_lets_start">Let\'s Start</string>
+    <string name="onboarding_button_next">Next</string>
+    <string name="onboarding_skip">Skip</string>
 </resources>
