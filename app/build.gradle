@@ -59,9 +59,21 @@ dependencies {
     //recycler
     implementation 'androidx.recyclerview:recyclerview:1.2.1@aar'
 
+    //room
+    implementation("androidx.room:room-runtime:2.4.2")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:2.4.2")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:2.4.2")
+
     //hilt
     implementation 'com.google.dagger:hilt-android:2.41'
     kapt 'com.google.dagger:hilt-compiler:2.41'
+
+//    //loading
+//    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }
 
 // Allow references to generated code
