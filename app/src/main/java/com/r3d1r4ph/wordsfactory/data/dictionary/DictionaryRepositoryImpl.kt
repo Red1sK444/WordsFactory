@@ -1,6 +1,7 @@
 package com.r3d1r4ph.wordsfactory.data.dictionary
 
-import com.r3d1r4ph.wordsfactory.domain.Dictionary
+import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
+import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
 import com.r3d1r4ph.wordsfactory.utils.exceptions.NoWordException
 import com.r3d1r4ph.wordsfactory.utils.safeApiCall
 import javax.inject.Inject

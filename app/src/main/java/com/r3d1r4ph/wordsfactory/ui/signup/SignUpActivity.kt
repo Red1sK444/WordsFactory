@@ -1,7 +1,7 @@
 package com.r3d1r4ph.wordsfactory.ui.signup
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivitySignUpBinding
+import com.r3d1r4ph.wordsfactory.ui.menu.MenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -82,7 +83,6 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun openDictionaryScreen() {
-        Toast.makeText(this, "openDictionaryScreen", Toast.LENGTH_SHORT).show()
-        //TODO openDictionaryScreen
+        startActivity(Intent(this, MenuActivity::class.java))
     }
 }

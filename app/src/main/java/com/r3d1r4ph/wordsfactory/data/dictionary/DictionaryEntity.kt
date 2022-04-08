@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.r3d1r4ph.wordsfactory.domain.Dictionary
+import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 
 @Entity(tableName = "dictionary")
 data class DictionaryEntity(

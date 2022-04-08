@@ -2,7 +2,7 @@ package com.r3d1r4ph.wordsfactory.data.dictionary
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.r3d1r4ph.wordsfactory.domain.Meaning
+import com.r3d1r4ph.wordsfactory.domain.models.Meaning
 
 @Entity(tableName = "meaning")
 data class MeaningEntity(

@@ -1,6 +1,6 @@
-package com.r3d1r4ph.wordsfactory.data.dictionary
+package com.r3d1r4ph.wordsfactory.domain.interfaces
 
-import com.r3d1r4ph.wordsfactory.domain.Dictionary
+import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 
 interface DictionaryRepository {
 

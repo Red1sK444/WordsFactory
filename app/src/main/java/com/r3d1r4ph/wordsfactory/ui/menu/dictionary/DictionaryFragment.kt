@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.FragmentDictionaryBinding
-import com.r3d1r4ph.wordsfactory.domain.Dictionary
+import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler.MeaningItemDecoration
 import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler.MeaningsAdapter
 import com.r3d1r4ph.wordsfactory.utils.exceptions.ExceptionHolder

@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.domain
+package com.r3d1r4ph.wordsfactory.domain.models
 
 data class Dictionary(
     val word: String,

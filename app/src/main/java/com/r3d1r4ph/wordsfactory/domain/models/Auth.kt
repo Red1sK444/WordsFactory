@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.domain
+package com.r3d1r4ph.wordsfactory.domain.models
 
 data class Auth(
     val name: String,

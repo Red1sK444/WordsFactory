@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepository
+import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
 import com.r3d1r4ph.wordsfactory.utils.exceptions.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

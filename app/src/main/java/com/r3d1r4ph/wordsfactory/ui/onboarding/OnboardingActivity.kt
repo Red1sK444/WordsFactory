@@ -2,7 +2,6 @@ package com.r3d1r4ph.wordsfactory.ui.onboarding
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -10,6 +9,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivityOnboardingBinding
+import com.r3d1r4ph.wordsfactory.ui.menu.MenuActivity
 import com.r3d1r4ph.wordsfactory.ui.signup.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -78,8 +78,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun openDictionaryScreen() {
-        Toast.makeText(this, "openDictionaryScreen", Toast.LENGTH_SHORT).show()
-        //TODO openDictionaryScreen
+        startActivity(Intent(this, MenuActivity::class.java))
     }
 
     private fun nextIntro() {

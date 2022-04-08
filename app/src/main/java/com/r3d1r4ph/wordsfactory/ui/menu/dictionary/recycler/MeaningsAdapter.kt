@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ItemRecyclerMeaningBinding
-import com.r3d1r4ph.wordsfactory.domain.Meaning
+import com.r3d1r4ph.wordsfactory.domain.models.Meaning
 
 class MeaningsAdapter : ListAdapter<Meaning, MeaningsAdapter.ViewHolder>(DIFF) {
 

@@ -1,8 +1,8 @@
 package com.r3d1r4ph.wordsfactory.di
 
-import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepository
+import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepositoryImpl
-import com.r3d1r4ph.wordsfactory.domain.AuthRepository
+import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
 import com.r3d1r4ph.wordsfactory.data.auth.AuthRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -18,6 +18,7 @@ abstract class RepositoryModule {
         dictionaryRepositoryImpl: DictionaryRepositoryImpl
     ): DictionaryRepository
 
+    @Binds
     abstract fun bindAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
