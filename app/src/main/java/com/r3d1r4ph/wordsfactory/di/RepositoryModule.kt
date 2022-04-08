@@ -1,5 +1,7 @@
 package com.r3d1r4ph.wordsfactory.di
 
+import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepository
+import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryRepositoryImpl
 import com.r3d1r4ph.wordsfactory.domain.AuthRepository
 import com.r3d1r4ph.wordsfactory.data.auth.AuthRepositoryImpl
 import dagger.Binds
@@ -12,8 +14,11 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class RepositoryModule {
 
     @Binds
+    abstract fun bindDictionaryRepository(
+        dictionaryRepositoryImpl: DictionaryRepositoryImpl
+    ): DictionaryRepository
+
     abstract fun bindAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
 }
-

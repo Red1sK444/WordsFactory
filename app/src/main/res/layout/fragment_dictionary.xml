@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.menu.dictionary.DictionaryFragment">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dictionarySearchTextInputLayout"
+        style="@style/Widget.Design.TextInputEditText.MyTextInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:endIconDrawable="@drawable/ic_search"
+        app:endIconMode="custom"
+        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dictionarySearchTextInputEditText"
+            style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText.MyTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="18dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/dictionaryWordTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.HeadingH1Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/dictionarySearchTextInputLayout" />
+
+    <TextView
+        android:id="@+id/dictionaryTranscriptionTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/orange"
+        app:layout_constraintBottom_toBottomOf="@+id/dictionaryWordTextView"
+        app:layout_constraintStart_toEndOf="@+id/dictionaryWordTextView"
+        app:layout_constraintTop_toTopOf="@+id/dictionaryWordTextView" />
+
+    <ImageButton
+        android:id="@+id/dictionaryVolumeImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_volume"
+        app:layout_constraintBottom_toBottomOf="@+id/dictionaryTranscriptionTextView"
+        app:layout_constraintStart_toEndOf="@+id/dictionaryTranscriptionTextView"
+        app:layout_constraintTop_toTopOf="@+id/dictionaryTranscriptionTextView"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/dictionarySpeechPartTitleTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.HeadingH2Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/dictionary_part_of_speech"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/dictionaryWordTextView" />
+
+    <TextView
+        android:id="@+id/dictionarySpeechPartTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/dictionarySpeechPartTitleTextView"
+        app:layout_constraintStart_toEndOf="@+id/dictionarySpeechPartTitleTextView"
+        app:layout_constraintTop_toTopOf="@+id/dictionarySpeechPartTitleTextView" />
+
+    <TextView
+        android:id="@+id/dictionaryMeaningsTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.HeadingH2Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/dictionary_meanings"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/dictionarySpeechPartTitleTextView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dictionaryRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintBottom_toTopOf="@+id/dictionaryAddButton"
+        app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/dictionaryMeaningsTextView" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dictionaryAddButton"
+        style="@style/Widget.MaterialComponents.Button.ButtonMediumText.MediumButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/dictionary_add_to_dictionary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <ImageView
+        android:id="@+id/dictionaryNoWordImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_no_word"
+        app:layout_constraintBottom_toTopOf="@+id/dictionaryNoWordTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dictionarySearchTextInputLayout"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/dictionaryNoWordTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.HeadingH1Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/dictionary_no_word"
+        android:textColor="@color/dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/dictionaryNoWordImageView" />
+
+    <TextView
+        android:id="@+id/dictionaryNoWordDescriptionTextView"
+        style="@style/Base.Widget.MaterialComponents.TextView.ParagraphMediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/dictionary_no_word_description"
+        android:textColor="@color/dark_gray"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/dictionaryNoWordTextView" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/dictionaryMatchWordGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="dictionarySpeechPartTitleTextView,dictionaryVolumeImageButton,dictionarySpeechPartTextView,dictionaryMeaningsTextView,dictionaryWordTextView,dictionaryRecyclerView,dictionaryTranscriptionTextView,dictionaryAddButton" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/dictionaryNoWordGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="dictionaryNoWordTextView,dictionaryNoWordDescriptionTextView,dictionaryNoWordImageView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

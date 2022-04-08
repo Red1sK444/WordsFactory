@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">WordsFactory</string>
+    <string name="empty"/>
+
+    <!-- Failures -->
+    <string name="exception_no_internet_connection">No Internet Connection</string>
+    <string name="unknown_exception">UnknownError</string>
+    <string name="empty_field">Empty field</string>
+  
+    <!-- Dictionary -->
+    <string name="bottom_nav_item_dictionary">Dictionary</string>
+    <string name="bottom_nav_item_training">Training</string>
+    <string name="bottom_nav_item_video">Video</string>
+    <string name="dictionary_part_of_speech">Part of Speech:</string>
+    <string name="dictionary_meanings">Meanings:</string>
+    <string name="dictionary_add_to_dictionary">Add to Dictionary</string>
+    <string name="dictionary_no_word">No word</string>
+    <string name="dictionary_no_word_description">Input something to find it in dictionary</string>
+    <string name="meaning_example_start">Example:</string>
 
     <!-- Sign Up -->
     <string name="sign_up">Sign up</string>
@@ -9,7 +26,6 @@
     <string name="signup_password">Password</string>
     <string name="signup_empty_field">Поле не заполнено</string>
     <string name="signup_not_e_mail">Поле должно cодержать символ \'@\'</string>
-    <string name="empty"/>
 
     <!-- Onboarding -->
     <string name="onboarding_intro_1_title">Learn anytime\nand anywhere</string>
