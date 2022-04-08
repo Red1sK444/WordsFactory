@@ -74,10 +74,12 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun openSignUpScreen() {
+        finish()
         startActivity(Intent(this, SignUpActivity::class.java))
     }
 
     private fun openDictionaryScreen() {
+        finish()
         startActivity(Intent(this, MenuActivity::class.java))
     }
 
