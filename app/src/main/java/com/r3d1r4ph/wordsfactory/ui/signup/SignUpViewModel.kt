@@ -25,10 +25,6 @@ class SignUpViewModel @Inject constructor(
     val uiState: LiveData<SignUpUiState>
         get() = _uiState
 
-    init {
-        checkAuth()
-    }
-
     fun signUp(
         name: String,
         email: String,
@@ -97,13 +93,4 @@ class SignUpViewModel @Inject constructor(
     private suspend fun authorize(auth: Auth) {
         authRepository.insertAuth(auth)
     }
-
-    private fun checkAuth() {
-        viewModelScope.launch {
-            _uiState.postValue(
-                _uiState.value?.copy(openDictionaryScreen = authRepository.checkAuth())
-            )
-        }
-    }
-
 }

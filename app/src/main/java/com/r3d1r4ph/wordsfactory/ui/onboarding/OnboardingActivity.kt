@@ -1,5 +1,6 @@
 package com.r3d1r4ph.wordsfactory.ui.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -9,7 +10,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.databinding.ActivityOnboardingBinding
+import com.r3d1r4ph.wordsfactory.ui.signup.SignUpActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
 
     private val viewBinding by viewBinding(ActivityOnboardingBinding::bind, R.id.rootLayout)
@@ -57,6 +61,10 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setObservers() {
         viewModel.uiState.observe(this) { uiState ->
             with(viewBinding) {
+                if (uiState.openDictionaryScreen) {
+                    openDictionaryScreen()
+                }
+
                 onboardingViewPager.setCurrentItem(uiState.currentIntro.ordinal, true)
 
                 onboardingNextButton.text =
@@ -66,8 +74,12 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun openSignUpScreen() {
-        Toast.makeText(this, "openSignUpScreen", Toast.LENGTH_SHORT).show()
-        //TODO openSignUpScreen
+        startActivity(Intent(this, SignUpActivity::class.java))
+    }
+
+    private fun openDictionaryScreen() {
+        Toast.makeText(this, "openDictionaryScreen", Toast.LENGTH_SHORT).show()
+        //TODO openDictionaryScreen
     }
 
     private fun nextIntro() {

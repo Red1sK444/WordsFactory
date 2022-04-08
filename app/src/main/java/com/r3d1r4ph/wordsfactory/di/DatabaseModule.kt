@@ -1,7 +1,8 @@
-package com.r3d1r4ph.wordsfactory.data
+package com.r3d1r4ph.wordsfactory.di
 
 import android.content.Context
 import androidx.room.Room
+import com.r3d1r4ph.wordsfactory.data.AppDatabase
 import com.r3d1r4ph.wordsfactory.data.auth.AuthDao
 import dagger.Module
 import dagger.Provides

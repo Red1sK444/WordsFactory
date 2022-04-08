@@ -3,8 +3,16 @@ package com.r3d1r4ph.wordsfactory.ui.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.r3d1r4ph.wordsfactory.data.auth.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OnboardingViewModel : ViewModel() {
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _uiState =
         MutableLiveData(
@@ -16,6 +24,18 @@ class OnboardingViewModel : ViewModel() {
         get() = _uiState
 
     val introList = IntroEnum.values().toMutableList()
+
+    init {
+        checkAuth()
+    }
+
+    private fun checkAuth() {
+        viewModelScope.launch {
+            _uiState.postValue(
+                _uiState.value?.copy(openDictionaryScreen = authRepository.checkAuth())
+            )
+        }
+    }
 
     fun getCurrentIntro(): IntroEnum? =
         uiState.value?.currentIntro
