@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.data.auth
+package com.r3d1r4ph.wordsfactory.domain
 
 import com.r3d1r4ph.wordsfactory.domain.Auth
 
