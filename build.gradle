@@ -11,6 +11,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.serialization" version "1.6.20-M1"
 }
 
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

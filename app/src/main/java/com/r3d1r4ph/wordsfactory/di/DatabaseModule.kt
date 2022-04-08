@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.r3d1r4ph.wordsfactory.data.AppDatabase
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryDao
 import com.r3d1r4ph.wordsfactory.data.dictionary.MeaningDao
+import com.r3d1r4ph.wordsfactory.data.auth.AuthDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +26,11 @@ class DatabaseModule {
     fun provideMeaningDao(
         appDatabase: AppDatabase
     ): MeaningDao = appDatabase.getMeaningDao()
+
+    @Provides
+    fun provideAuthDao(
+        appDatabase: AppDatabase
+    ): AuthDao = appDatabase.getAuthDao()
 
     @Provides
     @Singleton

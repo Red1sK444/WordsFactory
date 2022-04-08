@@ -15,7 +15,16 @@
         android:theme="@style/Theme.WordsFactory">
         <activity
             android:name=".ui.menu.MenuActivity"
-            android:exported="true">
+            android:screenOrientation="portrait"
+            android:exported="true" />
+        <activity
+            android:name=".ui.signup.SignUpActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.onboarding.OnboardingActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
