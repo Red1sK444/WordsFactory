@@ -33,9 +33,9 @@ class OnboardingActivity : AppCompatActivity() {
         onboardingSkipButton.setOnClickListener { openSignUpScreen() }
         onboardingNextButton.setOnClickListener {
             if (viewModel.getCurrentIntro() == IntroEnum.THIRD) {
-                openSignUpScreen()
+                viewModel.openSignUpScreen()
             } else {
-                nextIntro()
+                viewModel.toNextIntro()
             }
         }
     }
@@ -61,14 +61,16 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setObservers() {
         viewModel.uiState.observe(this) { uiState ->
             with(viewBinding) {
-                if (uiState.openDictionaryScreen) {
-                    openDictionaryScreen()
-                }
-
                 onboardingViewPager.setCurrentItem(uiState.currentIntro.ordinal, true)
 
                 onboardingNextButton.text =
                     resources.getString(uiState.currentIntro.getButtonTextRes())
+            }
+        }
+        viewModel.uiEffect.observe(this) {
+            when (it) {
+                is OnboardingUiEffect.OpenSignUpScreen -> openSignUpScreen()
+                is OnboardingUiEffect.OpenDictionaryScreen -> openDictionaryScreen()
             }
         }
     }
@@ -81,9 +83,5 @@ class OnboardingActivity : AppCompatActivity() {
     private fun openDictionaryScreen() {
         finish()
         startActivity(Intent(this, MenuActivity::class.java))
-    }
-
-    private fun nextIntro() {
-        viewModel.toNextIntro()
     }
 }
