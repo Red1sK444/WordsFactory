@@ -1,5 +1,6 @@
 package com.r3d1r4ph.wordsfactory.ui.onboarding
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -30,7 +31,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initView() = with(viewBinding) {
         configureViewPager()
-        onboardingSkipButton.setOnClickListener { openSignUpScreen() }
+        onboardingSkipButton.setOnClickListener { openScreenWithClosingCurrent(SignUpActivity::class.java) }
         onboardingNextButton.setOnClickListener {
             if (viewModel.getCurrentIntro() == IntroEnum.THIRD) {
                 viewModel.openSignUpScreen()
@@ -69,19 +70,18 @@ class OnboardingActivity : AppCompatActivity() {
         }
         viewModel.uiEffect.observe(this) {
             when (it) {
-                is OnboardingUiEffect.OpenSignUpScreen -> openSignUpScreen()
-                is OnboardingUiEffect.OpenDictionaryScreen -> openDictionaryScreen()
+                is OnboardingUiEffect.OpenSignUpScreen -> openScreenWithClosingCurrent(
+                    SignUpActivity::class.java
+                )
+                is OnboardingUiEffect.OpenDictionaryScreen -> openScreenWithClosingCurrent(
+                    MenuActivity::class.java
+                )
             }
         }
     }
 
-    private fun openSignUpScreen() {
+    private fun <T : Activity> openScreenWithClosingCurrent(activityJavaClass: Class<T>) {
         finish()
-        startActivity(Intent(this, SignUpActivity::class.java))
-    }
-
-    private fun openDictionaryScreen() {
-        finish()
-        startActivity(Intent(this, MenuActivity::class.java))
+        startActivity(Intent(this, activityJavaClass))
     }
 }

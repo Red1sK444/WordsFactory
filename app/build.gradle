@@ -59,11 +59,11 @@ dependencies {
 
     //fragments & bottom mav
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     //flows
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha04'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha06'
 
     //recycler
     implementation 'androidx.recyclerview:recyclerview:1.2.1@aar'
