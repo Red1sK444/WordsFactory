@@ -14,6 +14,9 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val checkAuthUseCase: CheckAuthUseCase
 ) : ViewModel() {
+    private companion object {
+        const val COUNT_TO_NEXT = 1
+    }
 
     private val _uiState =
         MutableLiveData(
@@ -62,7 +65,7 @@ class OnboardingViewModel @Inject constructor(
     fun toNextIntro() {
         _uiState.value = uiState.value?.let {
             OnboardingUiState(
-                currentIntro = IntroEnum.values()[it.currentIntro.ordinal + 1]
+                currentIntro = IntroEnum.values()[it.currentIntro.ordinal.plus(COUNT_TO_NEXT)]
             )
         }
     }
