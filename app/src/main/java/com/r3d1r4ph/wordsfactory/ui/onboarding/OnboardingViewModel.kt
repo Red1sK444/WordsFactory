@@ -43,7 +43,7 @@ class OnboardingViewModel @Inject constructor(
 
     private fun checkAuth() {
         viewModelScope.launch {
-            if (checkAuthUseCase.invoke(Unit)) {
+            if (checkAuthUseCase.execute()) {
                 openDictionaryScreen()
             }
         }

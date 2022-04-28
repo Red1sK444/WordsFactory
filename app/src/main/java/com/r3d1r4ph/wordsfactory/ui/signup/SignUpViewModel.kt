@@ -54,7 +54,7 @@ class SignUpViewModel @Inject constructor(
                     nameError = nameError,
                     emailError = emailError,
                     passwordError = passwordError,
-                    openDictionaryScreen = checkAuthUseCase(Unit)
+                    openDictionaryScreen = checkAuthUseCase.execute()
                 )
             )
 
