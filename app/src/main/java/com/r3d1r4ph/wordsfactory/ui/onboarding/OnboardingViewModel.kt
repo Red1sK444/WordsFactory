@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
-import com.r3d1r4ph.wordsfactory.ui.utils.SingleLiveEvent
+import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,8 +27,8 @@ class OnboardingViewModel @Inject constructor(
     val uiState: LiveData<OnboardingUiState>
         get() = _uiState
 
-    private val _uiEffect = SingleLiveEvent<OnboardingUiEffect>()
-    val uiEffect: LiveData<OnboardingUiEffect>
+    private val _uiEffect = MutableLiveData<Event<OnboardingUiEffect>>()
+    val uiEffect: LiveData<Event<OnboardingUiEffect>>
         get() = _uiEffect
 
     val introList = IntroEnum.values().toMutableList()
@@ -38,7 +38,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun openSignUpScreen() {
-        _uiEffect.setValue(OnboardingUiEffect.OpenSignUpScreen)
+        _uiEffect.value = Event(OnboardingUiEffect.OpenSignUpScreen)
     }
 
     private fun checkAuth() {
@@ -50,7 +50,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun openDictionaryScreen() {
-        _uiEffect.setValue(OnboardingUiEffect.OpenDictionaryScreen)
+        _uiEffect.value = Event(OnboardingUiEffect.OpenDictionaryScreen)
     }
 
     fun getCurrentIntro(): IntroEnum? =

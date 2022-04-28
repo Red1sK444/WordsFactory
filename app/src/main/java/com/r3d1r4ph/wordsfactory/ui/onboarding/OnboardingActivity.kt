@@ -69,13 +69,14 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
         viewModel.uiEffect.observe(this) {
-            when (it) {
+            when (it.getContentIfNotHandled()) {
                 is OnboardingUiEffect.OpenSignUpScreen -> openScreenWithClosingCurrent(
                     SignUpActivity::class.java
                 )
                 is OnboardingUiEffect.OpenDictionaryScreen -> openScreenWithClosingCurrent(
                     MenuActivity::class.java
                 )
+                else -> {}
             }
         }
     }
