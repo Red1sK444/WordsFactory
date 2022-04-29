@@ -3,6 +3,7 @@ package com.r3d1r4ph.wordsfactory.ui.onboarding
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -34,7 +35,7 @@ class OnboardingActivity : AppCompatActivity() {
         onboardingSkipButton.setOnClickListener { openScreenWithClosingCurrent(SignUpActivity::class.java) }
         onboardingNextButton.setOnClickListener {
             if (viewModel.getCurrentIntro() == IntroEnum.THIRD) {
-                viewModel.openSignUpScreen()
+                openScreenWithClosingCurrent(SignUpActivity::class.java)
             } else {
                 viewModel.toNextIntro()
             }
@@ -70,13 +71,14 @@ class OnboardingActivity : AppCompatActivity() {
         }
         viewModel.uiEffect.observe(this) {
             when (it.getContentIfNotHandled()) {
-                is OnboardingUiEffect.OpenSignUpScreen -> openScreenWithClosingCurrent(
-                    SignUpActivity::class.java
-                )
                 is OnboardingUiEffect.OpenDictionaryScreen -> openScreenWithClosingCurrent(
                     MenuActivity::class.java
                 )
-                else -> {}
+                else -> Toast.makeText(
+                    this,
+                    getString(R.string.unknown_exception),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

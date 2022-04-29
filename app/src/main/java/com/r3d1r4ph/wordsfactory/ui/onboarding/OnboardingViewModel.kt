@@ -37,10 +37,6 @@ class OnboardingViewModel @Inject constructor(
         checkAuth()
     }
 
-    fun openSignUpScreen() {
-        _uiEffect.value = Event(OnboardingUiEffect.OpenSignUpScreen)
-    }
-
     private fun checkAuth() {
         viewModelScope.launch {
             if (checkAuthUseCase.execute()) {
