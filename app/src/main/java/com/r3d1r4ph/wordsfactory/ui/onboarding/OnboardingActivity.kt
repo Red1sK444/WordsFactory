@@ -69,16 +69,12 @@ class OnboardingActivity : AppCompatActivity() {
                     resources.getString(uiState.currentIntro.getButtonTextRes())
             }
         }
-        viewModel.uiEffect.observe(this) {
-            when (it.getContentIfNotHandled()) {
-                is OnboardingUiEffect.OpenDictionaryScreen -> openScreenWithClosingCurrent(
-                    MenuActivity::class.java
-                )
-                else -> Toast.makeText(
-                    this,
-                    getString(R.string.unknown_exception),
-                    Toast.LENGTH_SHORT
-                ).show()
+        viewModel.openDictionaryScreenUiEffect.observe(this) {
+            if (it.getContentIfNotHandled() == true) {
+                openScreenWithClosingCurrent(MenuActivity::class.java)
+            } else {
+                Toast.makeText(this, getString(R.string.unknown_exception), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

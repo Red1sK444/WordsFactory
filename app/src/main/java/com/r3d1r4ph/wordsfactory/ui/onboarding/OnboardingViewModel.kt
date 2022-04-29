@@ -27,9 +27,9 @@ class OnboardingViewModel @Inject constructor(
     val uiState: LiveData<OnboardingUiState>
         get() = _uiState
 
-    private val _uiEffect = MutableLiveData<Event<OnboardingUiEffect>>()
-    val uiEffect: LiveData<Event<OnboardingUiEffect>>
-        get() = _uiEffect
+    private val _openDictionaryScreenUiEffect = MutableLiveData<Event<Boolean>>()
+    val openDictionaryScreenUiEffect: LiveData<Event<Boolean>>
+        get() = _openDictionaryScreenUiEffect
 
     val introList = IntroEnum.values().toMutableList()
 
@@ -46,7 +46,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun openDictionaryScreen() {
-        _uiEffect.value = Event(OnboardingUiEffect.OpenDictionaryScreen)
+        _openDictionaryScreenUiEffect.value = Event(true)
     }
 
     fun getCurrentIntro(): IntroEnum? =
