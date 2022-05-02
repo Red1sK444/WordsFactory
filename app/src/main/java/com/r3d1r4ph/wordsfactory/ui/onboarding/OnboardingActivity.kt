@@ -32,10 +32,10 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initView() = with(viewBinding) {
         configureViewPager()
-        onboardingSkipButton.setOnClickListener { openScreenWithClosingCurrent(SignUpActivity::class.java) }
+        onboardingSkipButton.setOnClickListener { openScreenWithClosingCurrent<SignUpActivity>() }
         onboardingNextButton.setOnClickListener {
             if (viewModel.getCurrentIntro() == IntroEnum.THIRD) {
-                openScreenWithClosingCurrent(SignUpActivity::class.java)
+                openScreenWithClosingCurrent<SignUpActivity>()
             } else {
                 viewModel.toNextIntro()
             }
@@ -71,7 +71,7 @@ class OnboardingActivity : AppCompatActivity() {
         }
         viewModel.openDictionaryScreenUiEffect.observe(this) {
             if (it.getContentIfNotHandled() == true) {
-                openScreenWithClosingCurrent(MenuActivity::class.java)
+                openScreenWithClosingCurrent<MenuActivity>()
             } else {
                 Toast.makeText(this, getString(R.string.unknown_exception), Toast.LENGTH_SHORT)
                     .show()
@@ -79,8 +79,8 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun <T : Activity> openScreenWithClosingCurrent(activityJavaClass: Class<T>) {
+    private inline fun <reified T : Activity> openScreenWithClosingCurrent() {
         finish()
-        startActivity(Intent(this, activityJavaClass))
+        startActivity(Intent(this, T::class.java))
     }
 }
