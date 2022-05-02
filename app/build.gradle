@@ -52,7 +52,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //binding
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.0-beta01'
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.3'
 
     //viewModels
     implementation 'androidx.activity:activity-ktx:1.4.0'
@@ -63,7 +63,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     //flows
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
 
     //recycler
     implementation 'androidx.recyclerview:recyclerview:1.2.1@aar'
