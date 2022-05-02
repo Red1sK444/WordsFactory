@@ -1,9 +1,6 @@
 package com.r3d1r4ph.wordsfactory.ui.onboarding
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
 import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,11 +22,11 @@ class OnboardingViewModel @Inject constructor(
             )
         )
     val uiState: LiveData<OnboardingUiState>
-        get() = _uiState
+        get() = _uiState.map { it }
 
-    private val _openDictionaryScreenUiEffect = MutableLiveData<Event<Boolean>>()
-    val openDictionaryScreenUiEffect: LiveData<Event<Boolean>>
-        get() = _openDictionaryScreenUiEffect
+    private val _uiAction = MutableLiveData<Event<OnboardingAction>>()
+    val uiAction: LiveData<Event<OnboardingAction>>
+        get() = _uiAction.map { it }
 
     val introList = IntroEnum.values().toMutableList()
 
@@ -46,7 +43,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun openDictionaryScreen() {
-        _openDictionaryScreenUiEffect.value = Event(true)
+        _uiAction.value = Event(OnboardingAction.OpenDictionaryScreen)
     }
 
     fun getCurrentIntro(): IntroEnum? =

@@ -65,6 +65,9 @@ dependencies {
     //flows
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
 
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+
     //recycler
     implementation 'androidx.recyclerview:recyclerview:1.2.1@aar'
 

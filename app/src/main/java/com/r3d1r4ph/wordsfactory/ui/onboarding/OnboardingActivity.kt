@@ -3,7 +3,6 @@ package com.r3d1r4ph.wordsfactory.ui.onboarding
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -69,12 +68,12 @@ class OnboardingActivity : AppCompatActivity() {
                     resources.getString(uiState.currentIntro.getButtonTextRes())
             }
         }
-        viewModel.openDictionaryScreenUiEffect.observe(this) {
-            if (it.getContentIfNotHandled() == true) {
-                openScreenWithClosingCurrent<MenuActivity>()
-            } else {
-                Toast.makeText(this, getString(R.string.unknown_exception), Toast.LENGTH_SHORT)
-                    .show()
+        viewModel.uiAction.observe(this) {
+            when (it.getContentIfNotHandled()) {
+                is OnboardingAction.OpenDictionaryScreen -> {
+                    openScreenWithClosingCurrent<MenuActivity>()
+                }
+                null -> {}
             }
         }
     }
