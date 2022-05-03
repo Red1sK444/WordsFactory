@@ -1,18 +1,19 @@
 package com.r3d1r4ph.wordsfactory.ui.onboarding
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
+import androidx.lifecycle.*
+import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
+import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val checkAuthUseCase: CheckAuthUseCase
 ) : ViewModel() {
+    private companion object {
+        const val COUNT_TO_NEXT = 1
+    }
 
     private val _uiState =
         MutableLiveData(
@@ -21,7 +22,11 @@ class OnboardingViewModel @Inject constructor(
             )
         )
     val uiState: LiveData<OnboardingUiState>
-        get() = _uiState
+        get() = _uiState.map { it }
+
+    private val _uiAction = MutableLiveData<Event<OnboardingAction>>()
+    val uiAction: LiveData<Event<OnboardingAction>>
+        get() = _uiAction.map { it }
 
     val introList = IntroEnum.values().toMutableList()
 
@@ -31,10 +36,14 @@ class OnboardingViewModel @Inject constructor(
 
     private fun checkAuth() {
         viewModelScope.launch {
-            _uiState.postValue(
-                _uiState.value?.copy(openDictionaryScreen = authRepository.checkAuth())
-            )
+            if (checkAuthUseCase.execute()) {
+                openDictionaryScreen()
+            }
         }
+    }
+
+    private fun openDictionaryScreen() {
+        _uiAction.value = Event(OnboardingAction.OpenDictionaryScreen)
     }
 
     fun getCurrentIntro(): IntroEnum? =
@@ -49,7 +58,7 @@ class OnboardingViewModel @Inject constructor(
     fun toNextIntro() {
         _uiState.value = uiState.value?.let {
             OnboardingUiState(
-                currentIntro = IntroEnum.values()[it.currentIntro.ordinal + 1]
+                currentIntro = IntroEnum.values()[it.currentIntro.ordinal.plus(COUNT_TO_NEXT)]
             )
         }
     }

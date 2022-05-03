@@ -8,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
+import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val checkAuthUseCase: CheckAuthUseCase
 ) : ViewModel() {
 
     private companion object {
@@ -53,7 +54,7 @@ class SignUpViewModel @Inject constructor(
                     nameError = nameError,
                     emailError = emailError,
                     passwordError = passwordError,
-                    openDictionaryScreen = authRepository.checkAuth()
+                    openDictionaryScreen = checkAuthUseCase.execute()
                 )
             )
 
@@ -91,6 +92,6 @@ class SignUpViewModel @Inject constructor(
         }
 
     private suspend fun authorize(auth: Auth) {
-        authRepository.insertAuth(auth)
+        //authRepository.insertAuth(auth)
     }
 }

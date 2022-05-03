@@ -20,4 +20,11 @@ data class AuthEntity(
                 password = domain.password
             )
     }
+
+    fun toDomain(): Auth =
+        Auth(
+            name = name,
+            email = email,
+            password = password
+        )
 }

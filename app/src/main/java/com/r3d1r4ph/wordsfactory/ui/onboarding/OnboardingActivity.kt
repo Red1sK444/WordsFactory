@@ -1,5 +1,6 @@
 package com.r3d1r4ph.wordsfactory.ui.onboarding
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -30,12 +31,12 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initView() = with(viewBinding) {
         configureViewPager()
-        onboardingSkipButton.setOnClickListener { openSignUpScreen() }
+        onboardingSkipButton.setOnClickListener { openScreenWithClosingCurrent<SignUpActivity>() }
         onboardingNextButton.setOnClickListener {
             if (viewModel.getCurrentIntro() == IntroEnum.THIRD) {
-                openSignUpScreen()
+                openScreenWithClosingCurrent<SignUpActivity>()
             } else {
-                nextIntro()
+                viewModel.toNextIntro()
             }
         }
     }
@@ -61,29 +62,25 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setObservers() {
         viewModel.uiState.observe(this) { uiState ->
             with(viewBinding) {
-                if (uiState.openDictionaryScreen) {
-                    openDictionaryScreen()
-                }
-
                 onboardingViewPager.setCurrentItem(uiState.currentIntro.ordinal, true)
 
                 onboardingNextButton.text =
                     resources.getString(uiState.currentIntro.getButtonTextRes())
             }
         }
+        viewModel.uiAction.observe(this) {
+            it.getContentIfNotHandled()?.let { action ->
+                when (action) {
+                    is OnboardingAction.OpenDictionaryScreen -> {
+                        openScreenWithClosingCurrent<MenuActivity>()
+                    }
+                }
+            }
+        }
     }
 
-    private fun openSignUpScreen() {
+    private inline fun <reified T : Activity> openScreenWithClosingCurrent() {
         finish()
-        startActivity(Intent(this, SignUpActivity::class.java))
-    }
-
-    private fun openDictionaryScreen() {
-        finish()
-        startActivity(Intent(this, MenuActivity::class.java))
-    }
-
-    private fun nextIntro() {
-        viewModel.toNextIntro()
+        startActivity(Intent(this, T::class.java))
     }
 }

@@ -1,7 +1,7 @@
 package com.r3d1r4ph.wordsfactory.data.auth
 
-import com.r3d1r4ph.wordsfactory.domain.models.Auth
 import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
+import com.r3d1r4ph.wordsfactory.domain.models.Auth
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -12,6 +12,6 @@ class AuthRepositoryImpl @Inject constructor(
         authDao.insert(AuthEntity.domainToEntity(auth))
     }
 
-    override suspend fun checkAuth() =
-        authDao.getAuth().isNotEmpty()
+    override suspend fun getAuth() =
+        authDao.getAuth().map { it.toDomain() }
 }
