@@ -69,11 +69,12 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
         viewModel.uiAction.observe(this) {
-            when (it.getContentIfNotHandled()) {
-                is OnboardingAction.OpenDictionaryScreen -> {
-                    openScreenWithClosingCurrent<MenuActivity>()
+            it.getContentIfNotHandled()?.let { action ->
+                when (action) {
+                    is OnboardingAction.OpenDictionaryScreen -> {
+                        openScreenWithClosingCurrent<MenuActivity>()
+                    }
                 }
-                null -> {}
             }
         }
     }
