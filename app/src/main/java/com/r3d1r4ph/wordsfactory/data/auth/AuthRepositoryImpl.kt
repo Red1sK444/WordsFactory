@@ -8,9 +8,8 @@ class AuthRepositoryImpl @Inject constructor(
     private val authDao: AuthDao
 ) : AuthRepository {
 
-    override suspend fun insertAuth(auth: Auth) {
+    override suspend fun insertAuth(auth: Auth) =
         authDao.insert(AuthEntity.domainToEntity(auth))
-    }
 
     override suspend fun getAuth() =
         authDao.getAuth().map { it.toDomain() }

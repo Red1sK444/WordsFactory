@@ -6,21 +6,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
+import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCase
 import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.IsEmailFieldUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.IsEmailFieldUseCaseImpl.Companion.AT_SIGN
+import com.r3d1r4ph.wordsfactory.domain.usecases.IsFieldEmptyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val checkAuthUseCase: CheckAuthUseCase
+    private val checkAuthUseCase: CheckAuthUseCase,
+    private val authUseCase: AuthUseCase,
+    private val isFieldEmptyUseCase: IsFieldEmptyUseCase,
+    private val isEmailFieldUseCase: IsEmailFieldUseCase
 ) : ViewModel() {
-
-    private companion object {
-        const val AT_SIGN = '@'
-    }
 
     private val _uiState = MutableLiveData(SignUpUiState())
     val uiState: LiveData<SignUpUiState>
@@ -49,28 +51,25 @@ class SignUpViewModel @Inject constructor(
                 )
             }
 
-            _uiState.postValue(
-                SignUpUiState(
+            uiState.value?.let {
+                _uiState.value = it.copy(
                     nameError = nameError,
                     emailError = emailError,
-                    passwordError = passwordError,
-                    openDictionaryScreen = checkAuthUseCase.execute()
+                    passwordError = passwordError
                 )
-            )
-
+            }
         }
     }
 
     fun dismissError(inputFieldEnum: InputFieldEnum) {
         viewModelScope.launch {
             _uiState.value?.let {
-                _uiState.postValue(
+                _uiState.value =
                     it.copy(
                         nameError = if (inputFieldEnum == InputFieldEnum.NAME) null else it.nameError,
                         emailError = if (inputFieldEnum == InputFieldEnum.EMAIL) null else it.emailError,
                         passwordError = if (inputFieldEnum == InputFieldEnum.PASSWORD) null else it.passwordError
                     )
-                )
             }
         }
     }
@@ -92,6 +91,20 @@ class SignUpViewModel @Inject constructor(
         }
 
     private suspend fun authorize(auth: Auth) {
-        //authRepository.insertAuth(auth)
+        authUseCase.execute(auth)
+            .onSuccess { authorized ->
+                uiState.value?.let {
+                    if (authorized) {
+                        _uiState.value = it.copy(
+                            openDictionaryScreen = true
+                        )
+                    } else {
+
+                    }
+                }
+            }
+            .onFailure {
+
+            }
     }
 }
