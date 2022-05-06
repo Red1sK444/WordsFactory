@@ -22,17 +22,27 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        observeViewModel()
+        setObservers()
         initView()
     }
 
-    private fun observeViewModel() {
-        viewModel.uiState.observe(this) { uiState ->
+    private fun setObservers() = with(viewModel) {
+        uiState.observe(this@SignUpActivity) { uiState ->
             viewBinding.signUpButton.isEnabled = !uiState.openDictionaryScreen
             if (uiState.openDictionaryScreen) {
                 openDictionaryScreen()
             } else {
                 setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
+            }
+        }
+        uiAction.observe(this@SignUpActivity) { event ->
+            event.getContentIfNotHandled()?.let { action ->
+                when (action) {
+                    is SignUpAction.OpenDictionaryScreen -> openDictionaryScreen()
+                    is SignUpAction.Error -> {
+
+                    }
+                }
             }
         }
     }
@@ -70,16 +80,14 @@ class SignUpActivity : AppCompatActivity() {
         @StringRes emailError: Int?,
         @StringRes passwordError: Int?
     ) = with(viewBinding) {
-        setError(signUpNameTextInputLayout, nameError)
-        setError(signUpEmailTextInputLayout, emailError)
-        setError(signUpPasswordTextInputLayout, passwordError)
+        signUpNameTextInputLayout.setError(nameError)
+        signUpEmailTextInputLayout.setError(emailError)
+        signUpPasswordTextInputLayout.setError(passwordError)
     }
 
-    private fun setError(textInputLayout: TextInputLayout, @StringRes errorId: Int?) {
-        with(textInputLayout) {
-            error = resources.getString(errorId ?: R.string.empty)
-            isErrorEnabled = errorId != null
-        }
+    private fun TextInputLayout.setError(@StringRes errorId: Int?) {
+        error = resources.getString(errorId ?: R.string.empty)
+        isErrorEnabled = errorId != null
     }
 
     private fun openDictionaryScreen() {

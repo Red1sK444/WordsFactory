@@ -1,5 +1,6 @@
 package com.r3d1r4ph.wordsfactory.domain.usecases
 
+import com.r3d1r4ph.wordsfactory.common.exceptions.NoAuthorizedException
 import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
 import kotlinx.coroutines.CancellationException
@@ -7,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-interface AuthUseCase : UseCase<Auth, Result<Boolean>>
+interface AuthUseCase : UseCase<Auth, Result<Unit>>
 
 class AuthUseCaseImpl @Inject constructor(
     private val authRepository: AuthRepository
@@ -16,9 +17,13 @@ class AuthUseCaseImpl @Inject constructor(
         const val FAILED_INSERT = -1L
     }
 
-    override suspend fun execute(input: Auth): Result<Boolean> = withContext(Dispatchers.IO) {
+    override suspend fun execute(input: Auth): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            Result.success(authRepository.insertAuth(input) != FAILED_INSERT)
+            if (authRepository.insertAuth(input) != FAILED_INSERT) {
+                Result.success(Unit)
+            }
+            throw NoAuthorizedException()
+
         } catch (e: Exception) {
             if (e is CancellationException) {
                 throw e

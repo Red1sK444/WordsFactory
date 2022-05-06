@@ -4,8 +4,8 @@ import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.r3d1r4ph.wordsfactory.BuildConfig
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryService
-import com.r3d1r4ph.wordsfactory.utils.interceptors.NetworkConnectionInterceptor
-import com.r3d1r4ph.wordsfactory.utils.interceptors.StatusCodeInterceptor
+import com.r3d1r4ph.wordsfactory.data.utils.interceptors.NetworkConnectionInterceptor
+import com.r3d1r4ph.wordsfactory.data.utils.interceptors.StatusCodeInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,9 +1,6 @@
 package com.r3d1r4ph.wordsfactory.di
 
-import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCase
-import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCaseImpl
-import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
-import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCaseImpl
+import com.r3d1r4ph.wordsfactory.domain.usecases.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -23,4 +20,19 @@ abstract class UseCaseModule {
     abstract fun bindsAuthUseCase(
         authUseCaseImpl: AuthUseCaseImpl
     ) : AuthUseCase
+
+    @Binds
+    abstract fun bindsValidateNameUseCase(
+        validateNameUseCaseImpl: ValidateNameUseCaseImpl
+    ) : ValidateNameUseCase
+
+    @Binds
+    abstract fun bindsValidatePasswordUseCase(
+        validatePasswordUseCaseImpl: ValidatePasswordUseCaseImpl
+    ) : ValidatePasswordUseCase
+
+    @Binds
+    abstract fun bindsValidateEmailUseCase(
+        validateEmailUseCaseImpl: ValidateEmailUseCaseImpl
+    ) : ValidateEmailUseCase
 }
