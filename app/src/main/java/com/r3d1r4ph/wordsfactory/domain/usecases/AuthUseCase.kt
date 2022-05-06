@@ -21,9 +21,9 @@ class AuthUseCaseImpl @Inject constructor(
         try {
             if (authRepository.insertAuth(input) != FAILED_INSERT) {
                 Result.success(Unit)
+            } else {
+                throw NoAuthorizedException()
             }
-            throw NoAuthorizedException()
-
         } catch (e: Exception) {
             if (e is CancellationException) {
                 throw e

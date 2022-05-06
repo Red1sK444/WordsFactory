@@ -4,10 +4,11 @@ import com.r3d1r4ph.wordsfactory.common.exceptions.EmptyFieldException
 import com.r3d1r4ph.wordsfactory.common.exceptions.NoAtSignException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 interface ValidateEmailUseCase : UseCase<String, Result<Unit>>
 
-class ValidateEmailUseCaseImpl : ValidateNameUseCase {
+class ValidateEmailUseCaseImpl @Inject constructor() : ValidateEmailUseCase {
     companion object {
         const val AT_SIGN = '@'
     }
