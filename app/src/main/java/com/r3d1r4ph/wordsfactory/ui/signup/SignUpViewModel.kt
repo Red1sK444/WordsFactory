@@ -8,7 +8,10 @@ import com.r3d1r4ph.wordsfactory.common.exceptions.ExceptionHolder
 import com.r3d1r4ph.wordsfactory.common.exceptions.NoAtSignException
 import com.r3d1r4ph.wordsfactory.common.exceptions.NoAuthorizedException
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
-import com.r3d1r4ph.wordsfactory.domain.usecases.*
+import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateEmailUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateNameUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.ValidatePasswordUseCase
 import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -99,9 +102,12 @@ class SignUpViewModel @Inject constructor(
     }
 
     private suspend fun authorize(auth: Auth) {
+        enableAuthorizing()
+
         authUseCase.execute(auth)
             .onSuccess {
                 _uiAction.value = Event(SignUpAction.OpenDictionaryScreen)
+                disableAuthorizing()
             }
             .onFailure {
                 _uiAction.value = Event(
@@ -112,6 +118,25 @@ class SignUpViewModel @Inject constructor(
                         )
                     )
                 )
+                disableAuthorizing()
             }
+    }
+
+    private fun enableAuthorizing() {
+        _uiState.value?.let {
+            _uiState.value =
+                it.copy(
+                    authorizing = true
+                )
+        }
+    }
+
+    private fun disableAuthorizing() {
+        _uiState.value?.let {
+            _uiState.value =
+                it.copy(
+                    authorizing = false
+                )
+        }
     }
 }
