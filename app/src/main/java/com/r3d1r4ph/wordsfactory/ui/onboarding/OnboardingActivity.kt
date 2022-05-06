@@ -80,7 +80,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private inline fun <reified T : Activity> openScreenWithClosingCurrent() {
-        finish()
         startActivity(Intent(this, T::class.java))
+        finish()
     }
 }

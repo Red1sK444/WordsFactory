@@ -94,7 +94,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun openDictionaryScreen() {
-        finish()
         startActivity(Intent(this, MenuActivity::class.java))
+        finish()
     }
 }
