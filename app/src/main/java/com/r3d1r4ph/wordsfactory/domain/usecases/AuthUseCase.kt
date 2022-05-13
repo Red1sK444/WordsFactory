@@ -18,17 +18,10 @@ class AuthUseCaseImpl @Inject constructor(
     }
 
     override suspend fun execute(input: Auth): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            if (authRepository.insertAuth(input) != FAILED_INSERT) {
-                Result.success(Unit)
-            } else {
-                throw NoAuthorizedException()
-            }
-        } catch (e: Exception) {
-            if (e is CancellationException) {
-                throw e
-            }
-            Result.failure(e)
+        if (authRepository.insertAuth(input) != FAILED_INSERT) {
+            Result.success(Unit)
+        } else {
+            Result.failure(NoAuthorizedException())
         }
     }
 }

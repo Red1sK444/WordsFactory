@@ -22,17 +22,7 @@ abstract class UseCaseModule {
     ) : AuthUseCase
 
     @Binds
-    abstract fun bindsValidateNameUseCase(
-        validateNameUseCaseImpl: ValidateNameUseCaseImpl
-    ) : ValidateNameUseCase
-
-    @Binds
-    abstract fun bindsValidatePasswordUseCase(
-        validatePasswordUseCaseImpl: ValidatePasswordUseCaseImpl
-    ) : ValidatePasswordUseCase
-
-    @Binds
-    abstract fun bindsValidateEmailUseCase(
-        validateEmailUseCaseImpl: ValidateEmailUseCaseImpl
-    ) : ValidateEmailUseCase
+    abstract fun bindsValidateInputFieldUseCase(
+        validateInputFieldUseCaseImpl: ValidateInputFieldUseCaseImpl
+    ) : ValidateInputFieldUseCase
 }

@@ -8,10 +8,8 @@ import com.r3d1r4ph.wordsfactory.common.exceptions.ExceptionHolder
 import com.r3d1r4ph.wordsfactory.common.exceptions.NoAtSignException
 import com.r3d1r4ph.wordsfactory.common.exceptions.NoAuthorizedException
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
-import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCase
-import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateEmailUseCase
-import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateNameUseCase
-import com.r3d1r4ph.wordsfactory.domain.usecases.ValidatePasswordUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.*
+import com.r3d1r4ph.wordsfactory.domain.validation.ValidationRuleEnum
 import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,9 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val authUseCase: AuthUseCase,
-    private val validateNameUseCase: ValidateNameUseCase,
-    private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validatePasswordUseCase: ValidatePasswordUseCase
+    private val validateInputFieldUseCase: ValidateInputFieldUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData(SignUpUiState())
@@ -40,9 +36,9 @@ class SignUpViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
 
-            val nameResult = validateNameUseCase.execute(name)
-            val emailResult = validateEmailUseCase.execute(email)
-            val passwordResult = validatePasswordUseCase.execute(password)
+            val nameResult = validateInputFieldUseCase.execute(Pair(name, ValidationRuleEnum.EMPTY))
+            val emailResult = validateInputFieldUseCase.execute(Pair(name, ValidationRuleEnum.EMAIL))
+            val passwordResult = validateInputFieldUseCase.execute(Pair(name, ValidationRuleEnum.EMPTY))
 
             val hasError = listOf(
                 nameResult,
