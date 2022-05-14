@@ -3,13 +3,14 @@ package com.r3d1r4ph.wordsfactory.ui.signup
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.common.exceptions.EmptyFieldException
-import com.r3d1r4ph.wordsfactory.common.exceptions.ExceptionHolder
-import com.r3d1r4ph.wordsfactory.common.exceptions.NoAtSignException
-import com.r3d1r4ph.wordsfactory.common.exceptions.NoAuthorizedException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.EmptyFieldException
+import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoAtSignException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoAuthorizedException
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
-import com.r3d1r4ph.wordsfactory.domain.usecases.*
-import com.r3d1r4ph.wordsfactory.domain.validation.ValidationRuleEnum
+import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateInputFieldUseCase
+import com.r3d1r4ph.wordsfactory.domain.validation.ValidationRule
 import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,9 +37,12 @@ class SignUpViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
 
-            val nameResult = validateInputFieldUseCase.execute(Pair(name, ValidationRuleEnum.EMPTY))
-            val emailResult = validateInputFieldUseCase.execute(Pair(name, ValidationRuleEnum.EMAIL))
-            val passwordResult = validateInputFieldUseCase.execute(Pair(name, ValidationRuleEnum.EMPTY))
+            val nameResult =
+                validateInputFieldUseCase.execute(ValidationRule.NotEmpty(input = name))
+            val emailResult =
+                validateInputFieldUseCase.execute(ValidationRule.IsEmail(input = email))
+            val passwordResult =
+                validateInputFieldUseCase.execute(ValidationRule.NotEmpty(input = password))
 
             val hasError = listOf(
                 nameResult,

@@ -3,7 +3,7 @@ package com.r3d1r4ph.wordsfactory.data.utils.interceptors
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
-import com.r3d1r4ph.wordsfactory.common.exceptions.NoConnectivityException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoConnectivityException
 import okhttp3.Interceptor
 import okhttp3.Response
 

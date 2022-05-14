@@ -10,7 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.common.exceptions.ExceptionHolder
+import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
 import com.r3d1r4ph.wordsfactory.databinding.ActivitySignUpBinding
 import com.r3d1r4ph.wordsfactory.ui.menu.MenuActivity
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.r3d1r4ph.wordsfactory.common.exceptions
+package com.r3d1r4ph.wordsfactory.ui.utils
 
 import androidx.annotation.StringRes
 

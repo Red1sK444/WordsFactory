@@ -1,6 +1,6 @@
 package com.r3d1r4ph.wordsfactory.common
 
-import com.r3d1r4ph.wordsfactory.common.exceptions.UnknownException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.UnknownException
 import retrofit2.Response
 
 suspend fun <DTO, DOMAIN> safeApiCall(

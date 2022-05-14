@@ -1,9 +1,9 @@
 package com.r3d1r4ph.wordsfactory.domain.usecases
 
-import com.r3d1r4ph.wordsfactory.common.exceptions.NoAuthorizedException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoAuthorizedException
 import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
-import kotlinx.coroutines.CancellationException
+import com.r3d1r4ph.wordsfactory.domain.usecases.templates.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

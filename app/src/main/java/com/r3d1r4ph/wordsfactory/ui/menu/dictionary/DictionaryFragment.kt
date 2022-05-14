@@ -17,7 +17,7 @@ import com.r3d1r4ph.wordsfactory.databinding.FragmentDictionaryBinding
 import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler.MeaningItemDecoration
 import com.r3d1r4ph.wordsfactory.ui.menu.dictionary.recycler.MeaningsAdapter
-import com.r3d1r4ph.wordsfactory.common.exceptions.ExceptionHolder
+import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.util.*

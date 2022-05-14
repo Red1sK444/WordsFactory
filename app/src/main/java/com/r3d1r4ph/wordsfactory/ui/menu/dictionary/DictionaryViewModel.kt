@@ -6,7 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.r3d1r4ph.wordsfactory.R
 import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
-import com.r3d1r4ph.wordsfactory.common.exceptions.*
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoConnectivityException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoWordException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NotFoundException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.StatusCodeException
+import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
