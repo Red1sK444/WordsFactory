@@ -4,11 +4,12 @@ import com.r3d1r4ph.wordsfactory.domain.exceptions.EmptyFieldException
 import com.r3d1r4ph.wordsfactory.domain.exceptions.NoAtSignException
 
 sealed class ValidationRule(protected val input: String) {
-    class NotEmpty(input: String) : ValidationRule(input) {
+    class NotBlank(input: String) : ValidationRule(input) {
         override fun apply(): Result<Unit> =
-            when {
-                input.isBlank() -> Result.failure(EmptyFieldException())
-                else -> Result.success(Unit)
+            if (input.isBlank()) {
+                Result.failure(EmptyFieldException())
+            } else {
+                Result.success(Unit)
             }
     }
 

@@ -38,11 +38,11 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
 
             val nameResult =
-                validateInputFieldUseCase.execute(ValidationRule.NotEmpty(input = name))
+                validateInputFieldUseCase.execute(ValidationRule.NotBlank(input = name))
             val emailResult =
                 validateInputFieldUseCase.execute(ValidationRule.IsEmail(input = email))
             val passwordResult =
-                validateInputFieldUseCase.execute(ValidationRule.NotEmpty(input = password))
+                validateInputFieldUseCase.execute(ValidationRule.NotBlank(input = password))
 
             val hasError = listOf(
                 nameResult,

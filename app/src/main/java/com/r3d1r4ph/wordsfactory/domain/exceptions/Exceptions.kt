@@ -8,12 +8,8 @@ class NoAtSignException : Exception()
 
 class NoAuthorizedException : Exception()
 
-class NoConnectivityException : IOException()
-
 class NotFoundException: IOException()
 
 class NoWordException : Exception()
-
-class StatusCodeException(override val message: String?) : IOException(message)
 
 class UnknownException : Exception()
