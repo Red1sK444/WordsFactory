@@ -7,5 +7,5 @@ data class SignUpUiState(
     @StringRes val nameError: Int? = null,
     @StringRes val emailError: Int? = null,
     @StringRes val passwordError: Int? = null,
-    val openDictionaryScreen: Boolean = false
+    val authorizing: Boolean = false
 )

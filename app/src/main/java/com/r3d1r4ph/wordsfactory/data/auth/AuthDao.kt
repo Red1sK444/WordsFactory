@@ -9,7 +9,7 @@ import androidx.room.Query
 interface AuthDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(authEntity: AuthEntity)
+    suspend fun insert(authEntity: AuthEntity): Long
 
     @Query("SELECT * FROM auth")
     suspend fun getAuth(): List<AuthEntity>

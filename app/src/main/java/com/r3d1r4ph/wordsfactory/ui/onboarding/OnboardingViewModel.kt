@@ -22,7 +22,7 @@ class OnboardingViewModel @Inject constructor(
             )
         )
     val uiState: LiveData<OnboardingUiState>
-        get() = _uiState.map { it }
+        get() = _uiState
 
     private val _uiAction = MutableLiveData<Event<OnboardingAction>>()
     val uiAction: LiveData<Event<OnboardingAction>>

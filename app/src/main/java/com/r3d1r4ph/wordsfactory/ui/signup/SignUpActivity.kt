@@ -2,6 +2,7 @@ package com.r3d1r4ph.wordsfactory.ui.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.r3d1r4ph.wordsfactory.R
+import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
 import com.r3d1r4ph.wordsfactory.databinding.ActivitySignUpBinding
 import com.r3d1r4ph.wordsfactory.ui.menu.MenuActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,17 +24,28 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        observeViewModel()
+        setObservers()
         initView()
     }
 
-    private fun observeViewModel() {
-        viewModel.uiState.observe(this) { uiState ->
-            viewBinding.signUpButton.isEnabled = !uiState.openDictionaryScreen
-            if (uiState.openDictionaryScreen) {
-                openDictionaryScreen()
-            } else {
-                setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
+    private fun setObservers() = with(viewModel) {
+        uiState.observe(this@SignUpActivity) { uiState ->
+            viewBinding.signUpButton.isEnabled = !uiState.authorizing
+            setErrors(uiState.nameError, uiState.emailError, uiState.passwordError)
+        }
+        uiAction.observe(this@SignUpActivity) { event ->
+            event.getContentIfNotHandled()?.let { action ->
+                when (action) {
+                    is SignUpAction.OpenDictionaryScreen -> openDictionaryScreen()
+                    is SignUpAction.Error -> {
+                        val errorMessage = when (val holder = action.exceptionHolder) {
+                            is ExceptionHolder.Server -> holder.message
+                            is ExceptionHolder.Resource -> getString(holder.messageId)
+                        }
+
+                        Toast.makeText(this@SignUpActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
@@ -70,20 +83,18 @@ class SignUpActivity : AppCompatActivity() {
         @StringRes emailError: Int?,
         @StringRes passwordError: Int?
     ) = with(viewBinding) {
-        setError(signUpNameTextInputLayout, nameError)
-        setError(signUpEmailTextInputLayout, emailError)
-        setError(signUpPasswordTextInputLayout, passwordError)
+        signUpNameTextInputLayout.setError(nameError)
+        signUpEmailTextInputLayout.setError(emailError)
+        signUpPasswordTextInputLayout.setError(passwordError)
     }
 
-    private fun setError(textInputLayout: TextInputLayout, @StringRes errorId: Int?) {
-        with(textInputLayout) {
-            error = resources.getString(errorId ?: R.string.empty)
-            isErrorEnabled = errorId != null
-        }
+    private fun TextInputLayout.setError(@StringRes errorId: Int?) {
+        error = resources.getString(errorId ?: R.string.empty)
+        isErrorEnabled = errorId != null
     }
 
     private fun openDictionaryScreen() {
-        finish()
         startActivity(Intent(this, MenuActivity::class.java))
+        finish()
     }
 }

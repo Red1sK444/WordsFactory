@@ -1,97 +1,142 @@
 package com.r3d1r4ph.wordsfactory.ui.signup
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.r3d1r4ph.wordsfactory.R
-import com.r3d1r4ph.wordsfactory.domain.interfaces.AuthRepository
+import com.r3d1r4ph.wordsfactory.domain.exceptions.EmptyFieldException
+import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoAtSignException
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoAuthorizedException
 import com.r3d1r4ph.wordsfactory.domain.models.Auth
-import com.r3d1r4ph.wordsfactory.domain.usecases.CheckAuthUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.AuthUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateInputFieldUseCase
+import com.r3d1r4ph.wordsfactory.domain.validation.ValidationRule
+import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val checkAuthUseCase: CheckAuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val validateInputFieldUseCase: ValidateInputFieldUseCase
 ) : ViewModel() {
-
-    private companion object {
-        const val AT_SIGN = '@'
-    }
 
     private val _uiState = MutableLiveData(SignUpUiState())
     val uiState: LiveData<SignUpUiState>
         get() = _uiState
+
+    private val _uiAction = MutableLiveData<Event<SignUpAction>>()
+    val uiAction: LiveData<Event<SignUpAction>>
+        get() = _uiAction.map { it }
 
     fun signUp(
         name: String,
         email: String,
         password: String
     ) {
-        val nameError = emptyFieldCheck(name)
-        val emailError = emailFieldCheck(email)
-        val passwordError = emptyFieldCheck(password)
-
         viewModelScope.launch {
-            if (nameError == null
-                && emailError == null
-                && passwordError == null
-            ) {
-                authorize(
-                    Auth(
-                        name = name,
-                        email = email,
-                        password = password
+
+            val nameResult =
+                validateInputFieldUseCase.execute(ValidationRule.NotBlank(input = name))
+            val emailResult =
+                validateInputFieldUseCase.execute(ValidationRule.IsEmail(input = email))
+            val passwordResult =
+                validateInputFieldUseCase.execute(ValidationRule.NotBlank(input = password))
+
+            val hasError = listOf(
+                nameResult,
+                emailResult,
+                passwordResult
+            ).any { it.isFailure }
+
+            if (hasError) {
+                uiState.value?.let {
+                    _uiState.value = it.copy(
+                        nameError = getErrorMessageByValidationResult(nameResult),
+                        emailError = getErrorMessageByValidationResult(emailResult),
+                        passwordError = getErrorMessageByValidationResult(passwordResult)
                     )
-                )
+                }
+                return@launch
             }
 
-            _uiState.postValue(
-                SignUpUiState(
-                    nameError = nameError,
-                    emailError = emailError,
-                    passwordError = passwordError,
-                    openDictionaryScreen = checkAuthUseCase.execute()
+            authorize(
+                Auth(
+                    name = name,
+                    email = email,
+                    password = password
                 )
             )
-
         }
     }
 
     fun dismissError(inputFieldEnum: InputFieldEnum) {
         viewModelScope.launch {
             _uiState.value?.let {
-                _uiState.postValue(
+                _uiState.value =
                     it.copy(
                         nameError = if (inputFieldEnum == InputFieldEnum.NAME) null else it.nameError,
                         emailError = if (inputFieldEnum == InputFieldEnum.EMAIL) null else it.emailError,
                         passwordError = if (inputFieldEnum == InputFieldEnum.PASSWORD) null else it.passwordError
                     )
-                )
             }
         }
     }
 
     @StringRes
-    private fun emptyFieldCheck(text: String): Int? =
-        if (text.isBlank()) {
-            R.string.signup_empty_field
-        } else {
-            null
-        }
+    private fun getErrorMessageByValidationResult(validationResult: Result<Unit>): Int? {
+        validationResult
+            .onSuccess {
+                return null
+            }
+            .onFailure {
+                return when (it) {
+                    is EmptyFieldException -> R.string.signup_empty_field
+                    is NoAtSignException -> R.string.signup_not_e_mail
+                    else -> R.string.unknown_exception
+                }
+            }
 
-    @StringRes
-    private fun emailFieldCheck(text: String) =
-        emptyFieldCheck(text) ?: if (!text.contains(AT_SIGN)) {
-            R.string.signup_not_e_mail
-        } else {
-            null
-        }
+        return R.string.unknown_exception
+    }
 
     private suspend fun authorize(auth: Auth) {
-        //authRepository.insertAuth(auth)
+        enableAuthorizing()
+
+        authUseCase.execute(auth)
+            .onSuccess {
+                _uiAction.value = Event(SignUpAction.OpenDictionaryScreen)
+                disableAuthorizing()
+            }
+            .onFailure {
+                _uiAction.value = Event(
+                    SignUpAction.Error(
+                        ExceptionHolder.Resource(
+                            if (it is NoAuthorizedException) R.string.no_authorized_exception
+                            else R.string.unknown_exception
+                        )
+                    )
+                )
+                disableAuthorizing()
+            }
+    }
+
+    private fun enableAuthorizing() {
+        _uiState.value?.let {
+            _uiState.value =
+                it.copy(
+                    authorizing = true
+                )
+        }
+    }
+
+    private fun disableAuthorizing() {
+        _uiState.value?.let {
+            _uiState.value =
+                it.copy(
+                    authorizing = false
+                )
+        }
     }
 }
