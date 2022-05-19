@@ -1,7 +1,7 @@
 package com.r3d1r4ph.wordsfactory.data.dictionary
 
-import com.r3d1r4ph.wordsfactory.common.safeApiCall
-import com.r3d1r4ph.wordsfactory.domain.exceptions.NoWordException
+import com.r3d1r4ph.wordsfactory.data.utils.safeApiCall
+import com.r3d1r4ph.wordsfactory.domain.exceptions.UnknownException
 import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
 import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 import javax.inject.Inject
@@ -11,23 +11,21 @@ class DictionaryRepositoryImpl @Inject constructor(
     private val dictionaryDao: DictionaryDao
 ) : DictionaryRepository {
 
-    override suspend fun getDictionary(word: String): Result<Dictionary> {
-        return safeApiCall(
+    override suspend fun getDictionary(word: String): Dictionary =
+        safeApiCall(
             apiCall = {
                 dictionaryService.getDictionary(word)
             },
             onSuccess = { response ->
-                var result: Result<Dictionary> = Result.failure(NoWordException())
-
                 response.body()?.let { list ->
                     if (list.isNotEmpty()) {
-                        result = Result.success(value = list[0].toDomain())
+                        return list[0].toDomain()
                     }
+                    throw UnknownException()
                 }
-                result
+                throw UnknownException()
             }
         )
-    }
 
 
     override suspend fun getSavedDictionary(word: String): Dictionary? =

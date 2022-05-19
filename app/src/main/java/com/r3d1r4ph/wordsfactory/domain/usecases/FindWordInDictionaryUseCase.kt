@@ -14,17 +14,17 @@ class FindWordInDictionaryUseCaseImpl @Inject constructor(
     private val dictionaryRepository: DictionaryRepository
 ) : FindWordInDictionaryUseCase {
     override suspend fun execute(input: String): Result<Dictionary> = withContext(Dispatchers.IO) {
-        dictionaryRepository.getDictionary(input)
-            .onFailure { throwable ->
-                if (throwable is NoConnectivityException) {
-                    val wordDictionary = dictionaryRepository.getSavedDictionary(input)
+        try {
+            Result.success(dictionaryRepository.getDictionary(input))
+        } catch (throwable: Throwable) {
+            if (throwable is NoConnectivityException) {
+                val wordDictionary = dictionaryRepository.getSavedDictionary(input)
 
-                    return@withContext if (wordDictionary != null) {
-                        Result.success(wordDictionary)
-                    } else {
-                        Result.failure(throwable)
-                    }
+                if (wordDictionary != null) {
+                    return@withContext Result.success(wordDictionary)
                 }
             }
+            Result.failure(throwable)
+        }
     }
 }
