@@ -1,15 +1,14 @@
 package com.r3d1r4ph.wordsfactory.data.dictionary
 
-import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
-import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
-import com.r3d1r4ph.wordsfactory.domain.exceptions.NoWordException
 import com.r3d1r4ph.wordsfactory.common.safeApiCall
+import com.r3d1r4ph.wordsfactory.domain.exceptions.NoWordException
+import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
+import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 import javax.inject.Inject
 
 class DictionaryRepositoryImpl @Inject constructor(
     private val dictionaryService: DictionaryService,
-    private val dictionaryDao: DictionaryDao,
-    private val meaningDao: MeaningDao
+    private val dictionaryDao: DictionaryDao
 ) : DictionaryRepository {
 
     override suspend fun getDictionary(word: String): Result<Dictionary> {
@@ -26,7 +25,8 @@ class DictionaryRepositoryImpl @Inject constructor(
                     }
                 }
                 result
-            })
+            }
+        )
     }
 
 
@@ -34,14 +34,14 @@ class DictionaryRepositoryImpl @Inject constructor(
         dictionaryDao.getWordDictionary(word)?.toDomain()
 
 
-    override suspend fun saveDictionary(dictionary: Dictionary): Long {
-        val response = dictionaryDao.insertDictionary(dictionaryEntity = DictionaryEntity.domainToEntity(dictionary))
-        meaningDao.insertMeanings(dictionary.meanings.map {
-            MeaningEntity.domainToEntity(
-                domain = it,
-                word = dictionary.word
-            )
-        })
-        return response
-    }
+    override suspend fun saveDictionary(dictionary: Dictionary): Long =
+        dictionaryDao.insertWordDictionary(
+            dictionaryEntity = DictionaryEntity.domainToEntity(dictionary),
+            meanings = dictionary.meanings.map {
+                MeaningEntity.domainToEntity(
+                    domain = it,
+                    word = dictionary.word
+                )
+            }
+        )
 }

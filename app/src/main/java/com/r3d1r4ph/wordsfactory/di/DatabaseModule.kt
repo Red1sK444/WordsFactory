@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.r3d1r4ph.wordsfactory.data.AppDatabase
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryDao
-import com.r3d1r4ph.wordsfactory.data.dictionary.MeaningDao
 import com.r3d1r4ph.wordsfactory.data.auth.AuthDao
 import dagger.Module
 import dagger.Provides
@@ -21,11 +20,6 @@ class DatabaseModule {
     fun provideDictionaryDao(
         appDatabase: AppDatabase
     ): DictionaryDao = appDatabase.getDictionaryDao()
-
-    @Provides
-    fun provideMeaningDao(
-        appDatabase: AppDatabase
-    ): MeaningDao = appDatabase.getMeaningDao()
 
     @Provides
     fun provideAuthDao(
