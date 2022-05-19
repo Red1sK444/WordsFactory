@@ -15,6 +15,7 @@ import com.r3d1r4ph.wordsfactory.domain.usecases.FindWordInDictionaryUseCase
 import com.r3d1r4ph.wordsfactory.domain.usecases.SaveWordDictionaryUseCase
 import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateInputFieldUseCase
 import com.r3d1r4ph.wordsfactory.domain.validation.ValidationRule
+import com.r3d1r4ph.wordsfactory.ui.utils.Event
 import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -32,9 +33,9 @@ class DictionaryViewModel @Inject constructor(
     val uiState: LiveData<DictionaryUiState>
         get() = _uiState
 
-    private val _exception = MutableLiveData<ExceptionHolder>()
-    val exception: LiveData<ExceptionHolder>
-        get() = _exception
+    private val _uiAction = MutableLiveData<Event<DictionaryAction>>()
+    val uiAction: LiveData<Event<DictionaryAction>>
+        get() = _uiAction
 
     fun search(word: String) {
         viewModelScope.launch {
@@ -93,33 +94,37 @@ class DictionaryViewModel @Inject constructor(
                 }
             }
             .onFailure { throwable ->
+                val exceptionHolder: ExceptionHolder
                 when (throwable) {
-                    is NoConnectivityException -> {
-                        _exception.value = ExceptionHolder.Resource(
-                            R.string.exception_no_internet_connection
-                        )
-                    }
                     is NoWordException, is NotFoundException -> {
                         uiState.value?.let {
                             _uiState.value = it.copy(
                                 wordUiState = WordUiState.NoWord
                             )
                         }
+                        return@onFailure
+                    }
+                    is NoConnectivityException -> {
+                        exceptionHolder =
+                            ExceptionHolder.Resource(
+                                R.string.exception_no_internet_connection
+                            )
                     }
                     is StatusCodeException -> {
-                        _exception.value =
+                        exceptionHolder =
                             when (val message = throwable.message) {
                                 null -> ExceptionHolder.Resource(R.string.unknown_exception)
                                 else -> ExceptionHolder.Server(message)
                             }
                     }
                     else -> {
-                        _exception.value =
+                        exceptionHolder =
                             ExceptionHolder.Resource(
                                 R.string.unknown_exception
                             )
                     }
                 }
+                _uiAction.value = Event(DictionaryAction.Error(exceptionHolder))
             }
     }
 
@@ -148,17 +153,19 @@ class DictionaryViewModel @Inject constructor(
                             )
                         }
                         .onFailure { throwable ->
-                            if (throwable is WordNotSavedException) {
-                                _exception.value =
-                                    ExceptionHolder.Resource(
-                                        R.string.word_not_saved
-                                    )
-                            } else {
-                                _exception.value =
-                                    ExceptionHolder.Resource(
-                                        R.string.unknown_exception
-                                    )
-                            }
+                            _uiAction.value = Event(
+                                DictionaryAction.Error(
+                                    if (throwable is WordNotSavedException) {
+                                        ExceptionHolder.Resource(
+                                            R.string.word_not_saved
+                                        )
+                                    } else {
+                                        ExceptionHolder.Resource(
+                                            R.string.unknown_exception
+                                        )
+                                    }
+                                )
+                            )
                         }
                 }
             }

@@ -24,5 +24,4 @@ class SaveWordDictionaryUseCaseImpl @Inject constructor(
             Result.failure(WordNotSavedException())
         }
     }
-
 }

@@ -99,7 +99,7 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
                 dictionaryAddButton.isEnabled = !uiState.isLoading
 
                 //Word state handling
-                when(uiState.wordUiState) {
+                when (uiState.wordUiState) {
                     is WordUiState.Success -> {
                         dictionaryMatchWordGroup.isVisible = true
                         dictionaryNoWordGroup.isVisible = false
@@ -118,12 +118,17 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
             }
         }
 
-        exception.observe(viewLifecycleOwner) { exception ->
-            val message = when (exception) {
-                is ExceptionHolder.Resource -> resources.getString(exception.messageId)
-                is ExceptionHolder.Server -> exception.message
+        uiAction.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { action ->
+                if (action is DictionaryAction.Error) {
+                    val errorMessage = when (val holder = action.exceptionHolder) {
+                        is ExceptionHolder.Server -> holder.message
+                        is ExceptionHolder.Resource -> getString(holder.messageId)
+                    }
+
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
             }
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
