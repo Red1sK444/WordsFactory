@@ -9,7 +9,12 @@ import com.r3d1r4ph.wordsfactory.data.exceptions.NoConnectivityException
 import com.r3d1r4ph.wordsfactory.data.exceptions.StatusCodeException
 import com.r3d1r4ph.wordsfactory.domain.exceptions.NoWordException
 import com.r3d1r4ph.wordsfactory.domain.exceptions.NotFoundException
-import com.r3d1r4ph.wordsfactory.domain.interfaces.DictionaryRepository
+import com.r3d1r4ph.wordsfactory.domain.exceptions.WordNotSavedException
+import com.r3d1r4ph.wordsfactory.domain.usecases.CheckIsWordSavedUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.FindWordInDictionaryUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.SaveWordDictionaryUseCase
+import com.r3d1r4ph.wordsfactory.domain.usecases.ValidateInputFieldUseCase
+import com.r3d1r4ph.wordsfactory.domain.validation.ValidationRule
 import com.r3d1r4ph.wordsfactory.ui.utils.ExceptionHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +22,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DictionaryViewModel @Inject constructor(
-    private val dictionaryRepository: DictionaryRepository
+    private val validateInputFieldUseCase: ValidateInputFieldUseCase,
+    private val findWordInDictionaryUseCase: FindWordInDictionaryUseCase,
+    private val checkIsWordSavedUseCase: CheckIsWordSavedUseCase,
+    private val saveWordDictionaryUseCase: SaveWordDictionaryUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData(DictionaryUiState())
@@ -29,117 +37,90 @@ class DictionaryViewModel @Inject constructor(
         get() = _exception
 
     fun search(word: String) {
-        if (!isWordCorrect(word)) {
-            return
-        }
-
-        _uiState.value?.let {
-            _uiState.value =
-                it.copy(
-                    isLoading = true
-                )
-        }
-
         viewModelScope.launch {
-            val response = dictionaryRepository.getDictionary(word)
-            if (response.isSuccess) {
-                val dictionary = response.getOrNull()
+            if (!isWordCorrect(word)) {
+                return@launch
+            }
+
+            uiState.value?.let {
+                _uiState.value = it.copy(isLoading = true)
+            }
+
+            findWord(word)
+
+            _uiState.value?.let {
                 _uiState.postValue(
-                    DictionaryUiState(
-                        dictionary = dictionary,
-                        isWordSaved = isWordSaved(word),
-                        noWord = false
+                    it.copy(
+                        isLoading = false
                     )
                 )
-            } else {
-                when (val exception = response.exceptionOrNull()) {
+            }
+        }
+    }
+
+    private suspend fun isWordCorrect(word: String): Boolean {
+        validateInputFieldUseCase.execute(ValidationRule.NotBlank(word))
+            .onSuccess {
+                _uiState.value?.let {
+                    _uiState.value =
+                        it.copy(
+                            searchError = null
+                        )
+                }
+                return true
+            }
+            .onFailure {
+                _uiState.value?.let {
+                    _uiState.value =
+                        it.copy(
+                            searchError = R.string.empty_field
+                        )
+                }
+            }
+        return false
+    }
+
+    private suspend fun findWord(word: String) {
+        findWordInDictionaryUseCase.execute(word)
+            .onSuccess { dictionary ->
+                uiState.value?.let {
+                    _uiState.value = it.copy(
+                        wordUiState = WordUiState.Success(
+                            dictionary = dictionary,
+                            isWordSaved = checkIsWordSavedUseCase.execute(word)
+                        )
+                    )
+                }
+            }
+            .onFailure { throwable ->
+                when (throwable) {
                     is NoConnectivityException -> {
-                        savedSearch(word)
-                    }
-                    is NoWordException, is NotFoundException -> {
-                        _uiState.postValue(
-                            DictionaryUiState(
-                                noWord = true
-                            )
+                        _exception.value = ExceptionHolder.Resource(
+                            R.string.exception_no_internet_connection
                         )
                     }
+                    is NoWordException, is NotFoundException -> {
+                        uiState.value?.let {
+                            _uiState.value = it.copy(
+                                wordUiState = WordUiState.NoWord
+                            )
+                        }
+                    }
                     is StatusCodeException -> {
-                        _exception.postValue(
-                            when (val message = exception.message) {
+                        _exception.value =
+                            when (val message = throwable.message) {
                                 null -> ExceptionHolder.Resource(R.string.unknown_exception)
                                 else -> ExceptionHolder.Server(message)
                             }
-                        )
                     }
                     else -> {
-                        _exception.postValue(
+                        _exception.value =
                             ExceptionHolder.Resource(
                                 R.string.unknown_exception
                             )
-                        )
                     }
                 }
-
             }
-        }
-
-        _uiState.value?.let {
-            _uiState.postValue(
-                it.copy(
-                    isLoading = false
-                )
-            )
-        }
-    }
-
-    private fun isWordCorrect(word: String): Boolean =
-        if (word.isBlank()) {
-            _uiState.value?.let {
-                _uiState.value =
-                    it.copy(
-                        validation = R.string.empty_field
-                    )
-            }
-            false
-        } else {
-            _uiState.value?.let {
-                _uiState.value =
-                    it.copy(
-                        validation = null
-                    )
-            }
-            true
-        }
-
-    private suspend fun isWordSaved(word: String): Boolean {
-        val response = dictionaryRepository.getSavedDictionary(word)
-        return response.isSuccess
-    }
-
-
-    private suspend fun savedSearch(word: String) {
-        val response = dictionaryRepository.getSavedDictionary(word)
-        if (response.isSuccess) {
-            val dictionary = response.getOrNull()
-            _uiState.value = DictionaryUiState(
-                dictionary = dictionary,
-                isWordSaved = true,
-                noWord = false
-            )
-        } else {
-            when (response.exceptionOrNull()) {
-                is NoWordException -> {
-                    _exception.value = ExceptionHolder.Resource(
-                        R.string.exception_no_internet_connection
-                    )
-                }
-                else -> {
-                    _exception.value = ExceptionHolder.Resource(
-                        R.string.unknown_exception
-                    )
-                }
-            }
-        }
     }
 
     fun dismissValidationError() {
@@ -147,7 +128,7 @@ class DictionaryViewModel @Inject constructor(
             _uiState.value?.let {
                 _uiState.postValue(
                     it.copy(
-                        validation = null
+                        searchError = null
                     )
                 )
             }
@@ -156,13 +137,29 @@ class DictionaryViewModel @Inject constructor(
 
     fun addToSaved() {
         viewModelScope.launch {
-            _uiState.value?.let {
-                it.dictionary?.let { dict ->
-                    dictionaryRepository.saveDictionary(dict)
-
-                    _uiState.value = it.copy(
-                        isWordSaved = true
-                    )
+            _uiState.value?.let { state ->
+                if (state.wordUiState is WordUiState.Success) {
+                    saveWordDictionaryUseCase.execute(state.wordUiState.dictionary)
+                        .onSuccess {
+                            _uiState.value = state.copy(
+                                wordUiState = state.wordUiState.copy(
+                                    isWordSaved = true
+                                )
+                            )
+                        }
+                        .onFailure { throwable ->
+                            if (throwable is WordNotSavedException) {
+                                _exception.value =
+                                    ExceptionHolder.Resource(
+                                        R.string.word_not_saved
+                                    )
+                            } else {
+                                _exception.value =
+                                    ExceptionHolder.Resource(
+                                        R.string.unknown_exception
+                                    )
+                            }
+                        }
                 }
             }
         }

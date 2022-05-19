@@ -83,9 +83,10 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
     private fun setObservers() = with(viewModel) {
         uiState.observe(viewLifecycleOwner) { uiState ->
 
+            //searchError Handling
             with(viewBinding.dictionarySearchTextInputLayout) {
-                error = resources.getString(uiState.validation ?: R.string.empty)
-                isErrorEnabled = uiState.validation != null
+                error = resources.getString(uiState.searchError ?: R.string.empty)
+                isErrorEnabled = uiState.searchError != null
                 if (isErrorEnabled) {
                     return@observe
                 }
@@ -93,21 +94,27 @@ class DictionaryFragment : Fragment(R.layout.fragment_dictionary) {
 
             with(viewBinding) {
 
+                //loading Handling
                 dictionarySearchTextInputLayout.isEndIconVisible = !uiState.isLoading
                 dictionaryAddButton.isEnabled = !uiState.isLoading
 
-                if (uiState.noWord) {
-                    dictionaryMatchWordGroup.isVisible = false
-                    dictionaryNoWordGroup.isVisible = true
-                    return@observe
+                //Word state handling
+                when(uiState.wordUiState) {
+                    is WordUiState.Success -> {
+                        dictionaryMatchWordGroup.isVisible = true
+                        dictionaryNoWordGroup.isVisible = false
+
+                        dictionaryAddButton.isVisible = !uiState.wordUiState.isWordSaved
+
+                        uiState.wordUiState.dictionary.let(::fillWithWordInfo)
+                    }
+                    is WordUiState.NoWord -> {
+                        dictionaryMatchWordGroup.isVisible = false
+                        dictionaryNoWordGroup.isVisible = true
+                    }
                 }
 
-                dictionaryMatchWordGroup.isVisible = true
-                dictionaryNoWordGroup.isVisible = false
 
-                dictionaryAddButton.isVisible = !uiState.isWordSaved
-
-                uiState.dictionary?.let(::fillWithWordInfo)
             }
         }
 

@@ -12,4 +12,6 @@ class NotFoundException: IOException()
 
 class NoWordException : Exception()
 
+class WordNotSavedException : Exception()
+
 class UnknownException : Exception()

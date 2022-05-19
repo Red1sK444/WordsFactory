@@ -4,9 +4,12 @@ import androidx.annotation.StringRes
 import com.r3d1r4ph.wordsfactory.domain.models.Dictionary
 
 data class DictionaryUiState(
-    val dictionary: Dictionary? = null,
-    val isWordSaved: Boolean = false,
-    val noWord: Boolean = true,
-    val isLoading: Boolean = false,
-    @StringRes val validation: Int? = null
+    @StringRes val searchError: Int? = null,
+    val wordUiState: WordUiState = WordUiState.NoWord,
+    val isLoading: Boolean = false
 )
+
+sealed class WordUiState {
+    data class Success(val dictionary: Dictionary, val isWordSaved: Boolean) : WordUiState()
+    object NoWord : WordUiState()
+}

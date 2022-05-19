@@ -9,6 +9,6 @@ interface DictionaryDao {
     suspend fun getWordDictionary(word: String): DictionaryWithMeanings?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDictionary(dictionaryEntity: DictionaryEntity)
+    suspend fun insertDictionary(dictionaryEntity: DictionaryEntity): Long
 
 }

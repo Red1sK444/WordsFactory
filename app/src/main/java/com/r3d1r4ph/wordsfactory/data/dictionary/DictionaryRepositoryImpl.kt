@@ -30,20 +30,18 @@ class DictionaryRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getSavedDictionary(word: String): Result<Dictionary> =
-        when (val dictionary = dictionaryDao.getWordDictionary(word)?.toDomain()) {
-            is Dictionary -> Result.success(dictionary)
-            else -> Result.failure(NoWordException())
-        }
+    override suspend fun getSavedDictionary(word: String): Dictionary? =
+        dictionaryDao.getWordDictionary(word)?.toDomain()
 
 
-    override suspend fun saveDictionary(dictionary: Dictionary) {
-        dictionaryDao.insertDictionary(dictionaryEntity = DictionaryEntity.domainToEntity(dictionary))
+    override suspend fun saveDictionary(dictionary: Dictionary): Long {
+        val response = dictionaryDao.insertDictionary(dictionaryEntity = DictionaryEntity.domainToEntity(dictionary))
         meaningDao.insertMeanings(dictionary.meanings.map {
             MeaningEntity.domainToEntity(
                 domain = it,
                 word = dictionary.word
             )
         })
+        return response
     }
 }
