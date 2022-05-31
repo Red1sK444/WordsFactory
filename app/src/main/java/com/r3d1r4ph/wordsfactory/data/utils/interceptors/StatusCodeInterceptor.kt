@@ -1,7 +1,7 @@
 package com.r3d1r4ph.wordsfactory.data.utils.interceptors
 
+import com.r3d1r4ph.wordsfactory.data.exceptions.StatusCodeException
 import com.r3d1r4ph.wordsfactory.domain.exceptions.NotFoundException
-import com.r3d1r4ph.wordsfactory.domain.exceptions.StatusCodeException
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.json.JSONObject

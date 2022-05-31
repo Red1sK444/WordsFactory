@@ -4,7 +4,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryDao
 import com.r3d1r4ph.wordsfactory.data.dictionary.DictionaryEntity
-import com.r3d1r4ph.wordsfactory.data.dictionary.MeaningDao
 import com.r3d1r4ph.wordsfactory.data.dictionary.MeaningEntity
 import com.r3d1r4ph.wordsfactory.data.auth.AuthDao
 import com.r3d1r4ph.wordsfactory.data.auth.AuthEntity
@@ -15,6 +14,5 @@ import com.r3d1r4ph.wordsfactory.data.auth.AuthEntity
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getDictionaryDao(): DictionaryDao
-    abstract fun getMeaningDao(): MeaningDao
     abstract fun getAuthDao(): AuthDao
 }

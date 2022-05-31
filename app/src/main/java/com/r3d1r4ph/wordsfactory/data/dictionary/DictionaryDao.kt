@@ -9,6 +9,23 @@ interface DictionaryDao {
     suspend fun getWordDictionary(word: String): DictionaryWithMeanings?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDictionary(dictionaryEntity: DictionaryEntity)
+    suspend fun insertDictionary(dictionaryEntity: DictionaryEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMeanings(meanings: List<MeaningEntity>): List<Long>
+
+    @Transaction
+    suspend fun insertWordDictionary(
+        dictionaryEntity: DictionaryEntity,
+        meanings: List<MeaningEntity>
+    ): Long {
+        val dictionaryResult = insertDictionary(dictionaryEntity)
+        val meaningsResult = insertMeanings(meanings)
+
+        return if (dictionaryResult > 0 && meaningsResult.all { it > 0 }) {
+            dictionaryResult
+        } else {
+            0
+        }
+    }
 }

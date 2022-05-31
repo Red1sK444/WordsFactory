@@ -4,7 +4,6 @@ import com.r3d1r4ph.wordsfactory.domain.usecases.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 
 @Module
@@ -14,15 +13,30 @@ abstract class UseCaseModule {
     @Binds
     abstract fun bindsCheckAuthUseCase(
         checkAuthUseCaseImpl: CheckAuthUseCaseImpl
-    ) : CheckAuthUseCase
+    ): CheckAuthUseCase
 
     @Binds
     abstract fun bindsAuthUseCase(
         authUseCaseImpl: AuthUseCaseImpl
-    ) : AuthUseCase
+    ): AuthUseCase
 
     @Binds
     abstract fun bindsValidateInputFieldUseCase(
         validateInputFieldUseCaseImpl: ValidateInputFieldUseCaseImpl
-    ) : ValidateInputFieldUseCase
+    ): ValidateInputFieldUseCase
+
+    @Binds
+    abstract fun bindsCheckIsWordSavedUseCase(
+        checkIsWordSavedUseCaseImpl: CheckIsWordSavedUseCaseImpl
+    ): CheckIsWordSavedUseCase
+
+    @Binds
+    abstract fun bindsFindWordInDictionaryUseCase(
+        findWordInDictionaryUseCaseImpl: FindWordInDictionaryUseCaseImpl
+    ): FindWordInDictionaryUseCase
+
+    @Binds
+    abstract fun bindsSaveWordDictionaryUseCase(
+        saveWordDictionaryUseCaseImpl: SaveWordDictionaryUseCaseImpl
+    ): SaveWordDictionaryUseCase
 }
